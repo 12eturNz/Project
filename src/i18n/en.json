@@ -1,0 +1,10 @@
+{
+  "navbar": {
+    "sell": "Sell",
+    "buy": "Buy",
+    "agent": "Agent",
+    "partner": "Partner",
+    "about": "About Us",
+    "lang": "English"
+  }
+}
