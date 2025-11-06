@@ -44,7 +44,7 @@ const Home = () => {
 
   return (
     <div className="flex flex-col min-h-screen bg-white">
-      {/* ✅ Navbar */}
+      {/*  Navbar */}
       <motion.div
         initial={{ y: 0 }}
         animate={{ y: showFixedNavbar ? -100 : 0 }}
@@ -54,7 +54,7 @@ const Home = () => {
         <Navbar />
       </motion.div>
 
-      {/* ✅ Navbar Bottom */}
+      {/*  Navbar Bottom */}
       <motion.div
         initial={{ y: -100, opacity: 0 }}
         animate={{
@@ -67,7 +67,7 @@ const Home = () => {
         <Navbarbottom />
       </motion.div>
 
-      {/* ✅ Hero Section */}
+      {/*  Hero Section */}
       <section className="relative w-full min-h-[80vh] md:min-h-screen flex flex-col justify-between overflow-hidden bg-black">
         <div className="absolute inset-0">
           {[img1, img2, img3, img4].map((img, index) => (
@@ -127,7 +127,7 @@ const Home = () => {
         </motion.div>
       </section>
 
-      {/* ✅ Section ซื้อบ้านรีโนเวทใหม่กับ */}
+      {/*  Section ซื้อบ้านรีโนเวทใหม่กับ */}
       <section className="w-full bg-white py-16 md:py-24 px-4">
         <motion.h1
           className="text-center text-3xl md:text-5xl font-bold mb-10 md:mb-12"

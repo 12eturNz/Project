@@ -76,7 +76,7 @@ const Sell = memo(() => {
       {/*  Sections */}
       <PropertyTypeSection />
       <StepsWithHomerun />
-      <WhyHomerun onSellClick={scrollToRegister} /> {/* ✅ ส่ง prop */}
+      <WhyHomerun onSellClick={scrollToRegister} /> {/*  ส่ง prop */}
       <FAQSection />
 
       {/*  Register Form Scroll  */}
