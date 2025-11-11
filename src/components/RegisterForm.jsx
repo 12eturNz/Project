@@ -29,7 +29,7 @@ export default function RegisterForm() {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(formData);
-    alert("ส่งข้อมูลเรียบร้อย ✅");
+    alert("ส่งข้อมูลเรียบร้อย ");
   };
 
   return (

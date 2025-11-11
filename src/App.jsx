@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import AppRouter from "./router/AppRouter";
+import ScrollToTop from "./components/ScrollToTop";
 
 const AnimatedRoutes = () => {
   const location = useLocation();
@@ -16,7 +17,7 @@ const AnimatedRoutes = () => {
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -10 }}
         transition={{ duration: 0.4, ease: "easeInOut" }}
-      >
+      > <ScrollToTop />
         <AppRouter />
       </motion.div>
     </AnimatePresence>

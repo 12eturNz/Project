@@ -1,5 +1,7 @@
 import React, { useState, useEffect, memo, useRef } from "react";
 import { motion } from "framer-motion";
+import { useLocation } from "react-router-dom";
+
 import Navbar from "../components/Navbartop";
 import WhyHomerun from "../components/WhyHomerun";
 import Footer from "../components/Footer";
@@ -8,14 +10,16 @@ import StepsWithHomerun from "../components/StepsWithHomerun";
 import FAQSection from "../components/FAQSection";
 import RegisterForm from "../components/RegisterForm";
 import img1 from "../assets/house1.jpg";
+import Navbarbottom from "../components/Navbarbottom";
 
 const Sell = memo(() => {
   const [showFixedNavbar, setShowFixedNavbar] = useState(false);
   const registerRef = useRef(null);
+  const location = useLocation();
 
-  //  ฟังก์ชันเลื่อนไปยัง RegisterForm
+  // เลื่อนไปยัง RegisterForm
   const scrollToRegister = () => {
-    const yOffset = -80; // ปรับให้ไม่โดน Navbar บัง
+    const yOffset = -80;
     const element = registerRef.current;
     if (element) {
       const y =
@@ -24,6 +28,7 @@ const Sell = memo(() => {
     }
   };
 
+  // แสดง Navbar Bottom เมื่อ scroll ลงมา
   useEffect(() => {
     const handleScroll = () => {
       setShowFixedNavbar(window.scrollY > window.innerHeight * 0.6);
@@ -31,6 +36,19 @@ const Sell = memo(() => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  //  เมื่อเปิดหน้า /sell พร้อม hash  ให้เลื่อนไปยัง section นั้น Auto
+  useEffect(() => {
+    if (location.hash) {
+      const sectionId = location.hash.replace("#", "");
+      const target = document.getElementById(sectionId);
+      if (target) {
+        setTimeout(() => {
+          target.scrollIntoView({ behavior: "smooth" });
+        }, 300); // หน่วงเล็กน้อยให้ DOM โหลดครบ
+      }
+    }
+  }, [location]);
 
   const slideUp = {
     hidden: { opacity: 0, y: 60 },
@@ -43,7 +61,7 @@ const Sell = memo(() => {
 
   return (
     <div className="flex flex-col min-h-screen bg-white text-gray-800 overflow-x-hidden">
-      {/*  Navbar */}
+      {/* Navbar */}
       <motion.div
         initial={{ y: 0 }}
         animate={{ y: showFixedNavbar ? -100 : 0 }}
@@ -53,11 +71,24 @@ const Sell = memo(() => {
         <Navbar />
       </motion.div>
 
-      {/*  Hero Section */}
+      {/* Navbar Bottom */}
+      <motion.div
+        initial={{ y: -100, opacity: 0 }}
+        animate={{
+          y: showFixedNavbar ? 0 : -100,
+          opacity: showFixedNavbar ? 1 : 0,
+        }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+        className="fixed top-0 left-0 w-full z-30 shadow-md"
+      >
+        <Navbarbottom />
+      </motion.div>
+
+      {/* Hero Section */}
       <section className="relative w-full h-[60vh] sm:h-[70vh] md:h-[80vh] flex items-center justify-center overflow-hidden bg-black">
         <img
           src={img1}
-          alt="บ้านรีโนเวท Homerun"
+          alt="ขายบ้านกับทางPremium Asset"
           className="absolute inset-0 w-full h-full object-cover"
           loading="lazy"
         />
@@ -69,18 +100,29 @@ const Sell = memo(() => {
           className="relative z-10 text-white text-3xl sm:text-4xl md:text-5xl font-bold text-center px-4 leading-tight drop-shadow-lg"
         >
           ขายบ้านกับ <br />
-          <span className="text-[#bfa074]">Homerun</span>
+          <span className="text-[#bfa074]">Premium Asset</span>
         </motion.h1>
       </section>
 
-      {/*  Sections */}
-      <PropertyTypeSection />
-      <StepsWithHomerun />
-      <WhyHomerun onSellClick={scrollToRegister} /> {/*  ส่ง prop */}
-      <FAQSection />
+      {/* Sections */}
+      <section id="property-type">
+        <PropertyTypeSection />
+      </section>
 
-      {/*  Register Form Scroll  */}
-      <section ref={registerRef} className="mt-20 mb-16 px-3 sm:px-8">
+      <section id="steps">
+        <StepsWithHomerun />
+      </section>
+
+      <section id="why-homerun">
+        <WhyHomerun onSellClick={scrollToRegister} />
+      </section>
+
+      <section id="faq">
+        <FAQSection />
+      </section>
+
+      {/* Register Form */}
+      <section id="register-form" ref={registerRef} className="mt-20 mb-16 px-3 sm:px-8">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}

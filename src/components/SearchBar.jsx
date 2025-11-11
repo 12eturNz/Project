@@ -45,7 +45,7 @@ const SearchBar = () => {
           placeholder="ค้นหา ชื่อ / ที่ตั้ง / ทำเล / โครงการ"
           className="flex-1 px-4 py-3 text-gray-700 placeholder-gray-400 focus:outline-none"
         />
-        <button className="bg-[#c6a16b] hover:bg-[#b18d5c] text-white flex items-center justify-center gap-2 px-6 py-3 font-medium cursor-pointer transition-all duration-200">
+        <button className="bg-amber-950 hover:bg-[#b18d5c] text-white flex items-center justify-center gap-2 px-6 py-3 font-medium cursor-pointer transition-all duration-200">
           <Search size={18} />
           ค้นหา
         </button>

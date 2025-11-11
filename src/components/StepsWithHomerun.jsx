@@ -25,7 +25,7 @@ const steps = [
   {
     id: "05",
     icon: FileText,
-    title: "HOMERUN ยื่นข้อเสนอ และ ราคาสุดท้าย",
+    title: "Premium ยื่นข้อเสนอ และ ราคาสุดท้าย",
   },
 ];
 
@@ -37,7 +37,7 @@ const StepsWithHomerun = () => {
         <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
           5 ขั้นตอน{" "}
           <span className="text-[#bfa074] font-bold">เสนอทรัพย์</span>{" "}
-          กับ HOMERUN
+          กับ Premium Asset
         </h2>
 
         {/* Steps Grid */}

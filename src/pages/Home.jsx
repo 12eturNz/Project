@@ -16,6 +16,7 @@ import img1 from "../assets/house1.jpg";
 import img2 from "../assets/house2.jpg";
 import img3 from "../assets/house3.jpg";
 import img4 from "../assets/house4.jpg";
+import Asset from "../assets/Asset.png";
 
 import sukhumvit from "../assets/locations/sukhumvit.jpg";
 import silom from "../assets/locations/silom.jpg";
@@ -102,14 +103,14 @@ const Home = () => {
             variants={slideUp}
             className="max-w-2xl"
           >
-            <h2 className="text-3xl md:text-5xl font-bold mb-6 leading-tight drop-shadow-lg">
-              รับซื้ออสังหาฯ ทันที <br className="hidden md:block" />
-              ไม่ต้องประกาศขาย
-            </h2>
-            <p className="text-base md:text-lg mb-6 text-gray-200">
-              แจ้งผลอนุมัติภายใน 14 วัน* ด้วยเทคโนโลยี{" "}
-              <span className="font-semibold text-white">Homerun Ai</span> ที่ช่วยวิเคราะห์ราคาตลาด
-            </p>
+          <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold mb-6 leading-snug drop-shadow-lg">
+             Premium Asset <br className="hidden md:block" />อสังหาริมทรัพย์
+          </h2>
+          <p className="text-lg md:text-xl lg:text-2xl mb-6 text-gray-200">
+            ทุกประกาศผ่านการตรวจสอบ มั่นใจทุกการตัดสินใจ{" "}
+            <span className="font-semibold text-white">ครบจบที่นี่</span>
+          </p>
+
           </motion.div>
         </div>
 
@@ -135,7 +136,7 @@ const Home = () => {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
         >
-          ซื้อบ้านรีโนเวทใหม่กับ
+          ซื้อบ้านรีโนเวทใหม่กับ Premium Asset
         </motion.h1>
 
        {/* Search Bar */}
@@ -184,7 +185,7 @@ const Home = () => {
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
           >
-            Collection
+            Collection Premium
           </motion.h2>
 
           <motion.div
@@ -195,7 +196,7 @@ const Home = () => {
           >
             {/*  ตัวการ์ด */}
             <PropertyCard
-              image="https://img.homerunproptech.com/marketplace/marketplace_gallery_0_05_Aug_2025_1754360537363.jpeg"
+              image="https://img.homerunproptech.com/marketplace/marketplace_gallery_0_05_Aug_2025_1754360537363.jpeg"//1
               title="The Amber at Chatuchak"
               location="Chatuchak"
               price="฿26,900,000"
@@ -204,7 +205,7 @@ const Home = () => {
               tag="Renovated"
             />
             <PropertyCard
-              image="https://img.homerunproptech.com/marketplace/marketplace_gallery_0_05_Aug_2025_1754360537363.jpeg"
+              image="https://img.homerunproptech.com/marketplace/marketplace_gallery_0_06_Oct_2024_1728222954696.jpeg"//2
               title="The Amber at Chatuchak"
               location="Chatuchak"
               price="฿26,900,000"
@@ -213,7 +214,7 @@ const Home = () => {
               tag="Renovated"
             />
             <PropertyCard
-              image="https://img.homerunproptech.com/marketplace/marketplace_gallery_0_05_Aug_2025_1754360537363.jpeg"
+              image="https://img.homerunproptech.com/marketplace/marketplace_gallery_0_23_Aug_2025_1755924629539.jpg"//3
               title="The Amber at Chatuchak"
               location="Chatuchak"
               price="฿26,900,000"
@@ -222,7 +223,7 @@ const Home = () => {
               tag="Renovated"
             />
             <PropertyCard
-              image="https://img.homerunproptech.com/marketplace/marketplace_gallery_0_05_Aug_2025_1754360537363.jpeg"
+              image="https://img.homerunproptech.com/marketplace/marketplace_gallery_3_18_Aug_2025_1755481364237.jpg"//4
               title="The Amber at Chatuchak"
               location="Chatuchak"
               price="฿26,900,000"
@@ -231,7 +232,7 @@ const Home = () => {
               tag="Renovated"
             />
             <PropertyCard
-              image="https://img.homerunproptech.com/marketplace/marketplace_gallery_0_05_Aug_2025_1754360537363.jpeg"
+              image="https://img.homerunproptech.com/marketplace/marketplace_gallery_0_26_Jun_2025_1750933189373.jpeg"//5
               title="The Amber at Chatuchak"
               location="Chatuchak"
               price="฿26,900,000"
@@ -240,7 +241,7 @@ const Home = () => {
               tag="Renovated"
             />
             <PropertyCard
-              image="https://img.homerunproptech.com/marketplace/marketplace_gallery_0_05_Aug_2025_1754360537363.jpeg"
+              image="https://img.homerunproptech.com/marketplace/marketplace_gallery_0_05_Jul_2024_1720155351377.jpeg"//6
               title="The Amber at Chatuchak"
               location="Chatuchak"
               price="฿26,900,000"
@@ -278,52 +279,54 @@ const Home = () => {
               </div>
 
               {/*  Right Text */}
-              <motion.div
-                initial={{ opacity: 0, x: 50 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8 }}
-                className="relative z-10 md:order-none order-1"
-              >
-                <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-                  รู้จักกับ <span className="text-[#1a1a1a]">HOMERUN</span>
-                </h2>
-                <p className="text-gray-700 leading-relaxed mb-6">
-                  “HOMERUN” คือบริษัทสตาร์ทอัพในเครือฯ เอพี (ไทยแลนด์) จำกัด มหาชน 
-                  ที่เข้ามาบุกตลาดอสังหาริมทรัพย์มือสอง เพื่อเพิ่มสภาพคล่อง 
-                  และปลุกตลาดที่อยู่อาศัย
-                </p>
-                <p className="text-gray-700 leading-relaxed mb-6">
-                  เราเล็งเห็นโอกาสทั้งในมุมของเจ้าของบ้านมือสองที่ไม่รู้ว่าบ้านเก่ามีมูลค่าอย่างไร 
-                  และในมุมของผู้ซื้อที่กำลังหาบ้านในกรุงเทพฯ ด้วยงบประมาณจำกัด 
-                  เมื่อเปรียบเทียบกับการซื้อบ้านมือหนึ่งแล้ว 
-                  ได้มากกว่าในเรื่องของทำเลและพื้นที่ใช้สอย
-                </p>
-                <p className="text-gray-700 leading-relaxed mb-8">
-                  HOMERUN จึงเกิดขึ้นมาเพื่อช่วยแก้ปัญหาให้กับผู้ขายและผู้ซื้อบ้านมือสองในเมือง 
-                  โดยมีการใช้เทคโนโลยีใหม่อย่าง AI เข้ามาช่วยบริหารจัดการ 
-                  และวิเคราะห์ข้อมูลเพื่อเสนอราคาที่ตรงใจได้รวดเร็วยิ่งขึ้น
-                </p>
-
-                <a
-                  href="/about"
-                  className="inline-block border border-[#bfa074] text-[#bfa074] px-6 py-2 rounded-full text-sm font-medium hover:bg-[#bfa074] hover:text-white transition-all duration-300"
+              
+                <motion.div
+                  initial={{ opacity: 0, x: 50 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.8 }}
+                  className="relative z-10 md:order-none order-1"
                 >
-                  รู้จักเราให้มากขึ้น
-                </a>
+                  <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+                    รู้จักกับ <span className="text-[#1a1a1a]">Premium Asset</span>
+                  </h2>
+                  <p className="text-gray-700 leading-relaxed mb-6">
+                    “Premium Asset” คือบริษัทสตาร์ทอัพในเครือฯ เอพี (ไทยแลนด์) 
+                    ที่เข้ามาบุกตลาดอสังหาริมทรัพย์มือสอง เพื่อเพิ่มสภาพคล่อง 
+                    และปลุกตลาดที่อยู่อาศัย
+                  </p>
+                  {/* โลโก้  */}
+                  <div className="absolute -top-12 right-0 hidden md:block">
+                    <img
+                      src={Asset}
+                      alt="Logo"
+                      className="w-28 h-auto opacity-90"
+                      loading="lazy"
+                    />
+                  </div>
 
-                {/* โลโก้ AP */}
-                <div className="absolute top-0 right-0 hidden md:block">
-                  <img
-                    src="https://www.homerunproptech.com/assets/images/ap_logo.png"
-                    alt="AP Logo"
-                    className="w-16 h-auto opacity-90"
-                    loading="lazy"
-                  />
-                </div>
-              </motion.div>
-            </div>
-      </section>
+                  <p className="text-gray-700 leading-relaxed mb-6">
+                    เราเล็งเห็นโอกาสทั้งในมุมของเจ้าของบ้านมือสองที่ไม่รู้ว่าบ้านเก่ามีมูลค่าอย่างไร 
+                    และในมุมของผู้ซื้อที่กำลังหาบ้านในกรุงเทพฯ ด้วยงบประมาณจำกัด 
+                    เมื่อเปรียบเทียบกับการซื้อบ้านมือหนึ่งแล้ว 
+                    ได้มากกว่าในเรื่องของทำเลและพื้นที่ใช้สอย
+                  </p>
+                  <p className="text-gray-700 leading-relaxed mb-8">
+                    Premium Asset จึงเกิดขึ้นมาเพื่อช่วยแก้ปัญหาให้กับผู้ขายและผู้ซื้อบ้านมือสองในเมือง 
+                    โดยมีการใช้เทคโนโลยีใหม่อย่าง AI เข้ามาช่วยบริหารจัดการ 
+                    และวิเคราะห์ข้อมูลเพื่อเสนอราคาที่ตรงใจได้รวดเร็วยิ่งขึ้น
+                  </p>
+
+                  <a
+                    href="/about"
+                    className="inline-block border border-[#bfa074] text-[#bfa074] px-6 py-2 rounded-full text-sm font-medium hover:bg-[#bfa074] hover:text-white transition-all duration-300"
+                  >
+                    รู้จักเราให้มากขึ้น
+                  </a>
+                </motion.div>
+
+               </div>
+          </section>
 
 
 
@@ -335,30 +338,34 @@ const Home = () => {
       {/*  Alert Section */}
       <section className="relative flex flex-col md:flex-row items-center w-full min-h-[400px] md:h-[450px] overflow-hidden z-10">
 
-        <img
-          src="https://www.homerunproptech.com/assets/images/agent-faq-2.webp"
-          alt="register background"
-          className="absolute inset-0 w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-black/30 to-transparent"></div>
-
-        <div className="relative z-10 w-full px-6 md:px-24 flex justify-center md:justify-end text-center md:text-right">
-          <div className="max-w-lg text-white">
-            <h2 className="text-2xl md:text-4xl font-bold mb-4 leading-snug">
-              ลงทะเบียน ให้เราช่วยหาบ้าน<br />
-              ราคาต่ำกว่าตลาดให้คุณ ฟรี!
-            </h2>
-            <p className="text-gray-200 mb-6">
-              ระบบแจ้งเตือนอัตโนมัติเมื่อมีบ้านราคาต่ำกว่าตลาด
-            </p>
+              <img
+              src="https://getwallpapers.com/wallpaper/full/5/d/d/765277-top-business-wallpapers-2000x1333-picture.jpg"
+              alt="register background"
+              className="absolute inset-0 w-full h-full object-cover object-center filter contrast-125 saturate-125"
+              loading="eager"
+              decoding="sync"
+                  />
+      <div className="relative z-10 w-full px-6 md:px-24 flex justify-center md:justify-end text-center md:text-right">
+        <div className="max-w-lg text-white">
+          <h2 className="text-2xl md:text-4xl font-bold mb-4 leading-snug">
+            ลงทะเบียน ให้เราช่วยหาบ้าน<br />
+            ราคาต่ำกว่าตลาดให้คุณ ฟรี!
+          </h2>
+          <p className="text-gray-200 mb-6 md:-translate-x-16">
+            ระบบแจ้งเตือนอัตโนมัติเมื่อมีบ้านราคาต่ำกว่าตลาด
+          </p>
+          <div className="flex md:justify-end justify-center ">
             <Link
               to="/alert"
-              className="inline-block bg-[#4a90e2] hover:bg-[#357ab8] text-white font-medium px-6 py-2 rounded-full transition"
+              className="bg-[#4a90e2] hover:bg-[#357ab8] text-white font-medium px-6 py-2 rounded-full transition md:-translate-x-32"
             >
               กดรับการแจ้งเตือน
             </Link>
           </div>
         </div>
+      </div>
+
+
       </section>
       <WhyHomerun />
       <BlogSection />

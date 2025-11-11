@@ -39,7 +39,7 @@ const Home = memo(() => {
       <section className="relative w-full h-[60vh] xs:h-[65vh] sm:h-[70vh] md:h-[80vh] flex items-center justify-center overflow-hidden bg-black">
         <img
           src={img1}
-          alt="บ้านรีโนเวท Homerun"
+          alt="บ้านรีโนเวทกับทาง Premium Asset"
           className="absolute inset-0 w-full h-full object-cover"
           loading="lazy"
           decoding="async"
@@ -53,7 +53,7 @@ const Home = memo(() => {
           className="relative z-10 text-white text-2xl xs:text-3xl sm:text-4xl md:text-5xl font-bold text-center px-4 leading-tight"
         >
           ซื้อบ้านรีโนเวทใหม่กับ <br />
-          <span className="text-[#bfa074]">Homerun</span>
+          <span className="text-[#bfa074]">Premium Asset</span>
         </motion.h1>
       </section>
 

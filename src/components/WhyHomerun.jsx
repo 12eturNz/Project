@@ -6,7 +6,7 @@ import bgImage from "../assets/La.jpg";
 const WhyHomerun = ({ onSellClick }) => {
   const [tab, setTab] = useState("seller");
   const navigate = useNavigate();
-  const location = useLocation(); // ✅ ตรวจหน้าปัจจุบัน
+  const location = useLocation(); //  ตรวจหน้าปัจจุบัน
 
   const icons = {
     check: "✔️",
@@ -20,13 +20,13 @@ const WhyHomerun = ({ onSellClick }) => {
       { title: "ขายตามสภาพ", desc: "ไม่ต้องเสียเงินเสียเวลา ปรับปรุงบ้านเพื่อให้ขายได้", col1: "question", col2: "question" },
       { title: "มีข้อเสนอหลายรูปแบบ", desc: "ยืดหยุ่นตามความต้องการของผู้ขาย", col1: "cross", col2: "cross" },
       { title: "ประหยัดเวลา", desc: "ไม่ต้องติดประกาศขาย หรือคอยอัปเดตโพสต์ขายเองบนเว็บไซต์", col1: "cross", col2: "question" },
-      { title: "ปลอดภัย ไม่ทิ้งงาน", desc: "รับรองโดยบริษัทแม่ที่มั่นคง (บริษัท เอพี ไทยแลนด์ จำกัด มหาชน)", col1: "question", col2: "question" },
+      { title: "ปลอดภัย ไม่ทิ้งงาน", desc: "รับรองโดย (บริษัท เอพี ไทยแลนด์ จำกัด มหาชน)", col1: "question", col2: "question" },
       { title: "แจ้งผล และเสนอราคาเร็ว", desc: "ดำเนินการฉับไว", col1: "cross", col2: "cross" },
     ],
     buyer: [
       { title: "ได้บ้านทำเลดี", desc: "พื้นที่ใช้สอยเยอะ ในงบประมาณที่คุ้มค่า", col1: "check", col2: "question" },
       { title: "ตรวจเช็คสภาพและประวัติบ้านทุกหลัง", desc: "พร้อมต่อเติมซ่อมแซมให้เรียบร้อยแล้ว", col1: "cross", col2: "dash" },
-      { title: "มีการรับประกันหลังการขาย*", desc: "บ้านและคอนโดในโครงการ Homerun Collection รับประกันทุกหลัง", col1: "cross", col2: "question" },
+      { title: "มีการรับประกันหลังการขาย*", desc: "บ้านและคอนโดในโครงการ Premium รับประกันทุกหลัง", col1: "cross", col2: "question" },
       { title: "พร้อมเข้าอยู่", desc: "ไม่ต้องคุมผู้รับเหมาหรือเสี่ยงงบเกินงบ", col1: "question", col2: "check" },
       { title: "ช่วยลูกค้าเรื่องวงเงินกู้", desc: "และดอกเบี้ยอัตราพิเศษสำหรับบ้านมือสองตกแต่งใหม่", col1: "cross", col2: "dash" },
       { title: "หากต้องการซื้อเพื่อการลงทุน", desc: "เรามีเอเจนท์ในเครือช่วยนำไปปล่อยเช่าให้ได้", col1: "question", col2: "question" },
@@ -55,7 +55,7 @@ const WhyHomerun = ({ onSellClick }) => {
 
       <div className="relative z-10 max-w-6xl mx-auto px-4 py-16">
         <h2 className="text-center text-3xl md:text-4xl font-bold text-gray-900 mb-8">
-          ทำไมต้อง HOMERUN
+          ทำไมต้อง Premium Asset
         </h2>
 
         {/*  ปุ่มแท็บ */}
@@ -124,7 +124,7 @@ const WhyHomerun = ({ onSellClick }) => {
             onClick={handleSellClick}
             className="inline-block bg-[#bfa074] text-white px-8 py-3 rounded-full font-medium hover:bg-[#a38a5c] cursor-pointer transition"
           >
-            {tab === "seller" ? "ขายกับ HOMERUN" : "ค้นหาบ้านจาก HOMERUN"}
+            {tab === "seller" ? "ขายกับ Premium Asset" : "ค้นหาบ้านจาก Premium Asset"}
           </button>
         </div>
       </div>

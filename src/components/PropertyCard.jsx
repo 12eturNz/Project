@@ -49,7 +49,7 @@ const PropertyCard = ({
 
       {/* เนื้อหา */}
       <div className="p-4">
-        {/* ✅ ส่วนใหม่: ข้อมูลสรุป */}
+        {/*  ส่วนใหม่: ข้อมูลสรุป */}
         <div className="flex flex-wrap gap-2 mb-3 text-xs text-gray-700">
           {type && (
             <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full">
