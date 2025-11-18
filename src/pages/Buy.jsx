@@ -4,9 +4,15 @@ import Navbar from "../components/Navbartop";
 import SearchBar from "../components/SearchBar";
 import Footer from "../components/Footer";
 import PropertyGridWithPagination from "../components/PropertyGridWithPagination";
+<<<<<<< HEAD
 import img1 from "../assets/house1.jpg";
 
 
+=======
+import RegisterForm from "../components/RegisterForm";
+import img1 from "../assets/house1.jpg";
+
+>>>>>>> e3ae242678dfed5c8bf9cce6815a9f81991e0039
 const slideUp = {
   hidden: { opacity: 0, y: 60 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } },
