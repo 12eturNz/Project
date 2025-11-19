@@ -3,6 +3,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
+import { useTranslation } from "react-i18next";
 
 const reviews = [
   {
@@ -38,10 +39,12 @@ const reviews = [
 ];
 
 const ReviewCarousel = () => {
+  const { t } = useTranslation(); //เรียกใช้ hook 
+
   return (
     <div className="bg-[#f8f4ef] py-16 text-center">
       <h2 className="text-3xl font-bold text-gray-800 mb-10">
-        รีวิวจริงจากลูกค้า & เอเจนท์
+        {t("Review.H")}
       </h2>
 
       <Swiper
@@ -52,6 +55,12 @@ const ReviewCarousel = () => {
         autoplay={{ delay: 3000, disableOnInteraction: false }}
         pagination={{ clickable: true }}
         loop={true}
+        breakpoints={{
+          320: { slidesPerView: 1, spaceBetween: 20 },
+          640: { slidesPerView: 1, spaceBetween: 20 },
+          768: { slidesPerView: 2, spaceBetween: 30 },
+          1024: { slidesPerView: 3, spaceBetween: 40 },
+        }}
         className="max-w-[1300px] mx-auto"
       >
         {reviews.map((r, i) => (

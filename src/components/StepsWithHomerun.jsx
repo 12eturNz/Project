@@ -1,43 +1,24 @@
 import React from "react";
 import { ClipboardList, Video, Handshake, Search, FileText } from "lucide-react";
-
-const steps = [
-  {
-    id: "01",
-    icon: ClipboardList,
-    title: "กรอกข้อมูลเบื้องต้น เกี่ยวกับทรัพย์ที่ต้องการขาย",
-  },
-  {
-    id: "02",
-    icon: Video,
-    title: "นัดตรวจสภาพบ้านเบื้องต้น ผ่านวิดีโอคอล หรือ ตัวแทน*",
-  },
-  {
-    id: "03",
-    icon: Handshake,
-    title: "รับข้อเสนอราคาเบื้องต้น",
-  },
-  {
-    id: "04",
-    icon: Search,
-    title: "ทีมงานเข้าไปตรวจสอบสภาพจริง",
-  },
-  {
-    id: "05",
-    icon: FileText,
-    title: "Premium ยื่นข้อเสนอ และ ราคาสุดท้าย",
-  },
-];
+import { useTranslation } from "react-i18next";
 
 const StepsWithHomerun = () => {
+  const { t } = useTranslation();
+
+  const steps = [
+    { id: "01", icon: ClipboardList, title: t("Sell.T5") },
+    { id: "02", icon: Video, title: t("Sell.T6") },
+    { id: "03", icon: Handshake, title: t("Sell.T7") },
+    { id: "04", icon: Search, title: t("Sell.T8") },
+    { id: "05", icon: FileText, title: t("Sell.T9") },
+  ];
+
   return (
     <section className="bg-[#f4f4f4] py-20">
       <div className="max-w-7xl mx-auto px-6 text-center">
         {/* Title */}
         <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
-          5 ขั้นตอน{" "}
-          <span className="text-[#bfa074] font-bold">เสนอทรัพย์</span>{" "}
-          กับ Premium Asset
+          {t("Sell.H3")} <span className="text-[#bfa074] font-bold">{t("Sell.H4")}</span> {t("Sell.H5")}
         </h2>
 
         {/* Steps Grid */}
@@ -46,9 +27,7 @@ const StepsWithHomerun = () => {
             <div key={step.id} className="flex flex-col items-center text-center">
               {/* Icon */}
               <div className="flex flex-col items-center mb-3">
-                <p className="text-[#bfa074] text-sm font-bold mb-1">
-                  {step.id}
-                </p>
+                <p className="text-[#bfa074] text-sm font-bold mb-1">{step.id}</p>
                 <div className="bg-transparent text-[#6ba5c2]">
                   <step.icon size={44} strokeWidth={1.8} />
                 </div>

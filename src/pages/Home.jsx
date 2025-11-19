@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 import Navbar from "../components/Navbartop";
 import Navbarbottom from "../components/Navbarbottom";
@@ -22,12 +23,15 @@ import sukhumvit from "../assets/locations/sukhumvit.jpg";
 import silom from "../assets/locations/silom.jpg";
 import ratchada from "../assets/locations/ratchada.jpg";
 
+
 const slideUp = {
   hidden: { opacity: 0, y: 60 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } },
 };
 
+
 const Home = () => {
+  const { t } = useTranslation(); // ✅ เพิ่มแค่นี้
   const [showFixedNavbar, setShowFixedNavbar] = useState(false);
   const [fadeOutBottom, setFadeOutBottom] = useState(false);
 
@@ -104,11 +108,11 @@ const Home = () => {
             className="max-w-2xl"
           >
           <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold mb-6 leading-snug drop-shadow-lg">
-             Premium Asset <br className="hidden md:block" />อสังหาริมทรัพย์
+             Premium Asset <br className="hidden md:block" />{t("homeSection.heroTitle2")}
           </h2>
           <p className="text-lg md:text-xl lg:text-2xl mb-6 text-gray-200">
-            ทุกประกาศผ่านการตรวจสอบ มั่นใจทุกการตัดสินใจ{" "}
-            <span className="font-semibold text-white">ครบจบที่นี่</span>
+           {t("homeSection.heroDesc1")}{" "}
+            <span className="font-semibold text-white">{t("homeSection.heroDesc2")}</span>
           </p>
 
           </motion.div>
@@ -136,7 +140,7 @@ const Home = () => {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
         >
-          ซื้อบ้านรีโนเวทใหม่กับ Premium Asset
+          {t("homeSection.sectionBuyTitle")}
         </motion.h1>
 
        {/* Search Bar */}
@@ -257,7 +261,7 @@ const Home = () => {
               to="/collection"
               className="border border-[#bfa074] text-[#bfa074] rounded-full px-10 py-2 text-sm md:text-base font-medium hover:bg-[#bfa074] hover:text-white transition"
             >
-              ดูรายการทั้งหมด
+             {t("homeSection.viewAll")}
             </Link>
           </div>
         </div>
@@ -288,12 +292,10 @@ const Home = () => {
                   className="relative z-10 md:order-none order-1"
                 >
                   <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-                    รู้จักกับ <span className="text-[#1a1a1a]">Premium Asset</span>
+                    {t("homeSection.aboutTitle")} <span className="text-[#1a1a1a]"></span>
                   </h2>
                   <p className="text-gray-700 leading-relaxed mb-6">
-                    “Premium Asset” คือบริษัทสตาร์ทอัพในเครือฯ เอพี (ไทยแลนด์) 
-                    ที่เข้ามาบุกตลาดอสังหาริมทรัพย์มือสอง เพื่อเพิ่มสภาพคล่อง 
-                    และปลุกตลาดที่อยู่อาศัย
+                    {t("homeSection.aboutP")}
                   </p>
                   {/* โลโก้  */}
                   <div className="absolute -top-12 right-0 hidden md:block">
@@ -306,22 +308,17 @@ const Home = () => {
                   </div>
 
                   <p className="text-gray-700 leading-relaxed mb-6">
-                    เราเล็งเห็นโอกาสทั้งในมุมของเจ้าของบ้านมือสองที่ไม่รู้ว่าบ้านเก่ามีมูลค่าอย่างไร 
-                    และในมุมของผู้ซื้อที่กำลังหาบ้านในกรุงเทพฯ ด้วยงบประมาณจำกัด 
-                    เมื่อเปรียบเทียบกับการซื้อบ้านมือหนึ่งแล้ว 
-                    ได้มากกว่าในเรื่องของทำเลและพื้นที่ใช้สอย
+                      {t("homeSection.aboutP1")}
                   </p>
                   <p className="text-gray-700 leading-relaxed mb-8">
-                    Premium Asset จึงเกิดขึ้นมาเพื่อช่วยแก้ปัญหาให้กับผู้ขายและผู้ซื้อบ้านมือสองในเมือง 
-                    โดยมีการใช้เทคโนโลยีใหม่อย่าง AI เข้ามาช่วยบริหารจัดการ 
-                    และวิเคราะห์ข้อมูลเพื่อเสนอราคาที่ตรงใจได้รวดเร็วยิ่งขึ้น
+                   {t("homeSection.aboutP2")}
                   </p>
 
                   <a
                     href="/about"
                     className="inline-block border border-[#bfa074] text-[#bfa074] px-6 py-2 rounded-full text-sm font-medium hover:bg-[#bfa074] hover:text-white transition-all duration-300"
                   >
-                    รู้จักเราให้มากขึ้น
+                    {t("homeSection.aboutBtn")}
                   </a>
                 </motion.div>
 
@@ -348,18 +345,18 @@ const Home = () => {
       <div className="relative z-10 w-full px-6 md:px-24 flex justify-center md:justify-end text-center md:text-right">
         <div className="max-w-lg text-white">
           <h2 className="text-2xl md:text-4xl font-bold mb-4 leading-snug">
-            ลงทะเบียน ให้เราช่วยหาบ้าน<br />
-            ราคาต่ำกว่าตลาดให้คุณ ฟรี!
+           {t("homeSection.alertTitle")}<br /> {t("homeSection.alertTitle1")}
+           
           </h2>
           <p className="text-gray-200 mb-6 md:-translate-x-16">
-            ระบบแจ้งเตือนอัตโนมัติเมื่อมีบ้านราคาต่ำกว่าตลาด
+             {t("homeSection.alertDesc")}
           </p>
           <div className="flex md:justify-end justify-center ">
             <Link
               to="/alert"
               className="bg-[#4a90e2] hover:bg-[#357ab8] text-white font-medium px-6 py-2 rounded-full transition md:-translate-x-32"
             >
-              กดรับการแจ้งเตือน
+              {t("homeSection.alertBtn")}
             </Link>
           </div>
         </div>

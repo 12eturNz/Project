@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import Navbar from "../components/Navbartop";
 import Footer from "../components/Footer";
 import Asset from "../assets/Asset.png"; 
+import { useTranslation } from "react-i18next";
 
 const slideUp = {
   hidden: { opacity: 0, y: 60 },
@@ -11,6 +12,7 @@ const slideUp = {
 
 const About = memo(() => {
   const [showFixedNavbar, setShowFixedNavbar] = useState(false);
+    const { t } = useTranslation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -44,7 +46,7 @@ const About = memo(() => {
           animate="visible"
           className="relative z-10 text-white text-3xl sm:text-4xl md:text-5xl font-bold text-center px-4 leading-tight"
         >
-          เกี่ยวกับ <span className="text-[#bfa074]">Premium Asset</span>
+          {t("About.H")}<span className="text-[#bfa074]"> {t("About.H1")}</span>
         </motion.h1>
       </section>
 
@@ -67,12 +69,10 @@ const About = memo(() => {
             className="relative z-10"
           >
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-              รู้จักกับ <span className="text-[#1a1a1a]">Premium Asset</span>
+              {t("About.H2")}<span className="text-[#1a1a1a]"> {t("About.H1")}</span>
             </h2>
             <p className="text-gray-700 leading-relaxed mb-6">
-              “Premium Asset” คือบริษัทสตาร์ทอัพในเครือฯ เอพี (ไทยแลนด์) 
-              ที่เข้ามาบุกตลาดอสังหาริมทรัพย์มือสอง เพื่อเพิ่มสภาพคล่อง 
-              และปลุกตลาดที่อยู่อาศัย
+             {t("About.P1")}
             </p>
             <img
               src={Asset}
@@ -80,15 +80,10 @@ const About = memo(() => {
               className="w-28 h-auto opacity-90 my-4"
             />
             <p className="text-gray-700 leading-relaxed mb-6">
-              เราเล็งเห็นโอกาสทั้งในมุมของเจ้าของบ้านมือสองที่ไม่รู้ว่าบ้านเก่ามีมูลค่าอย่างไร 
-              และในมุมของผู้ซื้อที่กำลังหาบ้านในกรุงเทพฯ ด้วยงบประมาณจำกัด 
-              เมื่อเปรียบเทียบกับการซื้อบ้านมือหนึ่งแล้ว 
-              ได้มากกว่าในเรื่องของทำเลและพื้นที่ใช้สอย
+              {t("About.P2")}
             </p>
             <p className="text-gray-700 leading-relaxed mb-8">
-              Premium Asset จึงเกิดขึ้นมาเพื่อช่วยแก้ปัญหาให้กับผู้ขายและผู้ซื้อบ้านมือสองในเมือง 
-              โดยมีการใช้เทคโนโลยีใหม่อย่าง AI เข้ามาช่วยบริหารจัดการ 
-              และวิเคราะห์ข้อมูลเพื่อเสนอราคาที่ตรงใจได้รวดเร็วขึ้น
+             {t("About.P3")}
             </p>
           </motion.div>
         </div>
@@ -96,35 +91,33 @@ const About = memo(() => {
 
       <section className="w-full py-16 bg-gray-50">
         <div className="max-w-4xl mx-auto px-6 text-center">
-          <h2 className="text-3xl font-bold text-gray-900 mb-8">ข้อมูลบริษัท</h2>
+          <h2 className="text-3xl font-bold text-gray-900 mb-8">{t("About.T1")}</h2>
           <div className="bg-white p-8 rounded-lg shadow-md border border-gray-200">
             <p className="text-lg font-semibold text-gray-800 mb-4">
-              บริษัท โฮมรัน พร็อพเทค จำกัด
+             {t("About.T2")}
             </p>
             <p className="text-base text-gray-700 mb-6 max-w-2xl mx-auto leading-relaxed">
-              <span className="font-semibold">ที่อยู่:</span> 170/57 อาคารไอเชียนทาวเวอร์ 1 ชั้น 7 
-              ซ.สุขุมวิท 16 (สามมิตร) ถ.รัชดาภิเษกตัดใหม่ แขวงคลองเตย 
-              เขตคลองเตย กรุงเทพมหานคร 10110
+              <span className="font-semibold">{t("About.T3")}</span> {t("About.T4")}
             </p>
             <div className="flex flex-wrap items-center justify-center gap-6 text-base text-gray-700">
                 <div className="flex items-center gap-2">
-                  <span className="font-semibold">เบอร์โทรศัพท์:</span>
-                  <span>02-2612518 ต่อ 789</span>
+                  <span className="font-semibold">{t("About.T5")}</span>
+                  <span>{t("About.T6")}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="font-semibold">Sales:</span>
-                  <span>065-1196746</span>
+                  <span className="font-semibold">{t("About.T7")}</span>
+                  <span>{t("About.T8")}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="font-semibold">อีเมล:</span>
-                  <span>help@homerunproptech.com</span>
+                  <span className="font-semibold">{t("About.T9")}</span>
+                  <span>{t("About.T10")}</span>
                 </div>
             </div>
           </div>
         </div>
       </section>
 
-      <Footer />
+    
     </div>
   );
 });

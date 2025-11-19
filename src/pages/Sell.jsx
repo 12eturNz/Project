@@ -1,6 +1,7 @@
 import React, { useState, useEffect, memo, useRef } from "react";
 import { motion } from "framer-motion";
 import { useLocation } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 import Navbar from "../components/Navbartop";
 import WhyHomerun from "../components/WhyHomerun";
@@ -16,6 +17,7 @@ const Sell = memo(() => {
   const [showFixedNavbar, setShowFixedNavbar] = useState(false);
   const registerRef = useRef(null);
   const location = useLocation();
+   const { t } = useTranslation();
 
   // เลื่อนไปยัง RegisterForm
   const scrollToRegister = () => {
@@ -88,7 +90,7 @@ const Sell = memo(() => {
       <section className="relative w-full h-[60vh] sm:h-[70vh] md:h-[80vh] flex items-center justify-center overflow-hidden bg-black">
         <img
           src={img1}
-          alt="ขายบ้านกับทางPremium Asset"
+          alt=""
           className="absolute inset-0 w-full h-full object-cover"
           loading="lazy"
         />
@@ -99,8 +101,8 @@ const Sell = memo(() => {
           animate="visible"
           className="relative z-10 text-white text-3xl sm:text-4xl md:text-5xl font-bold text-center px-4 leading-tight drop-shadow-lg"
         >
-          ขายบ้านกับ <br />
-          <span className="text-[#bfa074]">Premium Asset</span>
+          {t("Sell.H")}<br />
+          <span className="text-[#bfa074]"> {t("Sell.H1")}</span>
         </motion.h1>
       </section>
 

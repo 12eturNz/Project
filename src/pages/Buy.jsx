@@ -4,15 +4,10 @@ import Navbar from "../components/Navbartop";
 import SearchBar from "../components/SearchBar";
 import Footer from "../components/Footer";
 import PropertyGridWithPagination from "../components/PropertyGridWithPagination";
-<<<<<<< HEAD
+import { useTranslation } from "react-i18next";
 import img1 from "../assets/house1.jpg";
 
 
-=======
-import RegisterForm from "../components/RegisterForm";
-import img1 from "../assets/house1.jpg";
-
->>>>>>> e3ae242678dfed5c8bf9cce6815a9f81991e0039
 const slideUp = {
   hidden: { opacity: 0, y: 60 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } },
@@ -20,6 +15,8 @@ const slideUp = {
 
 const Home = memo(() => {
   const [showFixedNavbar, setShowFixedNavbar] = useState(false);
+   const { t } = useTranslation();
+
 
   useEffect(() => {
     const handleScroll = () => {
@@ -58,8 +55,8 @@ const Home = memo(() => {
           animate="visible"
           className="relative z-10 text-white text-2xl xs:text-3xl sm:text-4xl md:text-5xl font-bold text-center px-4 leading-tight"
         >
-          ซื้อบ้านรีโนเวทใหม่กับ <br />
-          <span className="text-[#bfa074]">Premium Asset</span>
+          {t("Buy.H")} <br />
+          <span className="text-[#bfa074]">{t("Buy.H1")}</span>
         </motion.h1>
       </section>
 
@@ -88,11 +85,10 @@ const Home = memo(() => {
           className="text-center mb-10"
         >
           <h2 className="text-xl xs:text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900">
-            Homerun Collection
+            {t("Buy.H3")}
           </h2>
           <p className="text-gray-600 text-sm sm:text-base mt-3 px-2">
-            บ้านและคอนโดรีโนเวทตกแต่งใหม่แบบมีรับประกันโดยโฮมรัน
-            พร้อมเข้าอยู่หรือปล่อยเช่าได้ทันที
+           {t("Buy.P")}
           </p>
         </motion.div>
 
@@ -103,7 +99,7 @@ const Home = memo(() => {
 
       
 
-      {/* ✅ Footer */}
+     
       <Footer />
     </div>
   );

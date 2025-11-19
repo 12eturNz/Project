@@ -1,34 +1,37 @@
-import React from "react";
+import React, { memo } from "react";
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 
-const propertyTypes = [
-  {
-    title: "บ้านเดี่ยว",
-    image:
-      "	https://www.homerunproptech.com/assets/images/seller/singlehouse.jpg",
-  },
-  {
-    title: "บ้านแฝด",
-    image:
-      "	https://www.homerunproptech.com/assets/images/seller/twin.jpg",
-  },
-  {
-    title: "คอนโดมิเนียม",
-    image:
-      "	https://www.homerunproptech.com/assets/images/seller/condo.jpg",
-  },
-  {
-    title: "ทาวน์โฮม",
-    image:
-      "https://www.homerunproptech.com/assets/images/seller/townhome.jpg",
-  },
-];
+const PropertyTypeSection = memo(() => {
+  const { t } = useTranslation();
 
-const PropertyTypeSection = () => {
+  const propertyTypes = [
+    {
+      title: t("Sell.T1"),
+      image:
+        "https://www.homerunproptech.com/assets/images/seller/singlehouse.jpg",
+    },
+    {
+      title: t("Sell.T2"),
+      image:
+        "https://www.homerunproptech.com/assets/images/seller/twin.jpg",
+    },
+    {
+      title: t("Sell.T3"),
+      image:
+        "https://www.homerunproptech.com/assets/images/seller/condo.jpg",
+    },
+    {
+      title: t("Sell.T4"),
+      image:
+        "https://www.homerunproptech.com/assets/images/seller/townhome.jpg",
+    },
+  ];
+
   return (
     <section className="w-full py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/*  Title */}
+        {/* Title */}
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -36,12 +39,12 @@ const PropertyTypeSection = () => {
           transition={{ duration: 0.6 }}
           className="text-center text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-14"
         >
-          ประเภททรัพย์ที่{" "}
-          <span className="text-[#bfa074] font-bold">Homerun</span>{" "}
-          นำมารีโนเวท
+          {t("Sell.H2")}{" "}
+          <span className="text-[#bfa074] font-bold">{t("Sell.H3")}</span>{" "}
+          {t("Sell.H4")}
         </motion.h2>
 
-        {/*  Property Type Cards */}
+        {/* Property Type Cards */}
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -84,6 +87,6 @@ const PropertyTypeSection = () => {
       </div>
     </section>
   );
-};
+});
 
 export default PropertyTypeSection;

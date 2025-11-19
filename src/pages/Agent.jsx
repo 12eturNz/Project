@@ -5,6 +5,7 @@ import Footer from "../components/Footer";
 import RegisterFormAgent from "../components/RegisterFormAgent";
 import ReviewCarousel from "../components/ReviewCarousel"; 
 import img1 from "../assets/house1.jpg";
+import { useTranslation } from "react-i18next";
 import {
   UserPlus,
   ClipboardCheck,
@@ -19,35 +20,11 @@ import {
   ChevronDown,
 } from "lucide-react";
 
-const agentSteps = [
-  { icon: UserPlus, title: "1. สมัครเป็นเอเจนท์", desc: "กรอกข้อมูลในฟอร์มด้านล่าง และรอการติดต่อกลับ", color: "bg-blue-100 text-blue-600" },
-  { icon: ClipboardCheck, title: "2. รับสิทธิ์เข้าถึง", desc: "รับสิทธิ์ในการเข้าถึงทรัพย์คุณภาพพร้อมขาย", color: "bg-blue-100 text-blue-600" },
-  { icon: Home, title: "3. พาลูกค้าเข้าชม", desc: "นำเสนอและพาลูกค้าชมทรัพย์ (Co-Broke)", color: "bg-blue-100 text-blue-600" },
-  { icon: CheckCircle, title: "4. ปิดการขาย", desc: "รับค่าคอมมิชชั่นตามเงื่อนไขทันที", color: "bg-blue-100 text-blue-600" },
-];
 
-const agentSupport = [
-  { icon: Sparkles, title: "ทรัพย์รีโนเวทพร้อมขาย", desc: "ทรัพย์ของเราผ่านการรีโนเวท สวยงาม พร้อมปิดการขายได้ง่าย", color: "bg-green-100 text-green-600" },
-  { icon: Package, title: "สื่อการตลาดพร้อมใช้", desc: "มีรูปถ่าย วิดีโอ และข้อมูลทรัพย์ครบถ้วน พร้อมให้คุณโปรโมต", color: "bg-green-100 text-green-600" },
-  { icon: Zap, title: "ระบบ Co-Broke ที่รวดเร็ว", desc: "ขั้นตอนการทำงานชัดเจน แบ่งผลประโยชน์อย่างยุติธรรม", color: "bg-green-100 text-green-600" },
-  { icon: Users, title: "ทีมงานคอยสนับสนุน", desc: "มีทีม Admin และ Support คอยช่วยเหลือเรื่องเอกสารและนัดหมาย", color: "bg-green-100 text-green-600" },
-];
-
-const agentFAQ = [
-  { q: "Premium เชี่ยวชาญทรัพย์เขตใดบ้าง ?", a: "เรามีทรัพย์ในทุกโซนของกรุงเทพฯ" },
-  { q: "การสมัครเป็นตัวแทนเอเจนท์ และนำทรัพย์มาเสนอขายกับโฮมรัน มีข้อดีอย่างไร?", a: "โฮมรันช่วยให้การขายเร็วขึ้น เข้าถึงฐานลูกค้าโดยตรง และมีคอมมิชชั่นพิเศษ" },
-  { q: "สมัครเป็นตัวแทนเอเจนท์กับโฮมรัน มีข้อจำกัดอะไรไหม?", a: "ไม่มีข้อจำกัด สมัครได้ฟรี" },
-  { q: "หากช่วยขายบ้านตกแต่งใหม่จากโฮมรัน จะได้ค่าคอมมิชชั่นเท่าไหร่?", a: "รับสูงสุดถึง 3% ต่อการขายหนึ่งครั้ง" },
-];
-
-const slideUp = {
-  hidden: { opacity: 0, y: 60 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } },
-};
 
 const BenefitCard = ({ icon: Icon, title, desc }) => (
   <div className="bg-white p-6 rounded-lg shadow-lg border border-gray-100 
-                  transform hover:scale-105 transition-transform duration-300">
+                   transform hover:scale-105 transition-transform duration-300">
     <Icon
       className="text-[#bfa074] mb-3"
       size={40}
@@ -62,15 +39,43 @@ const BenefitCard = ({ icon: Icon, title, desc }) => (
   </div>
 );
 
-
 const Agent = memo(() => {
+  const { t } = useTranslation(); 
+
+  const agentSteps = [
+    { icon: UserPlus, title: t("Agent.I1"), desc: t("Agent.D1"), color: "bg-blue-100 text-blue-600" },
+    { icon: ClipboardCheck, title: t("Agent.I2"), desc: t("Agent.D2"), color: "bg-blue-100 text-blue-600" },
+    { icon: Home, title: t("Agent.I3"), desc: t("Agent.D3"), color: "bg-blue-100 text-blue-600" },
+    { icon: CheckCircle, title: t("Agent.I4"), desc: t("Agent.D4"), color: "bg-blue-100 text-blue-600" },
+  ];
+
+  const agentSupport = [
+    { icon: Sparkles, title: t("Agent.I5"), desc: t("Agent.D5"), color: "bg-green-100 text-green-600" },
+    { icon: Package, title: t("Agent.I6"), desc: t("Agent.D6"), color: "bg-green-100 text-green-600" },
+    { icon: Zap, title: t("Agent.I7"), desc: t("Agent.D7"), color: "bg-green-100 text-green-600" },
+    { icon: Users, title: t("Agent.I8"), desc: t("Agent.D8"), color: "bg-green-100 text-green-600" },
+  ];
+
+  const agentFAQ = [
+    { q: t("Agent.I9"), a:t("Agent.D9") },
+    { q:t("Agent.I10"), a: t("Agent.D10") },
+    { q: t("Agent.I11"), a: t("Agent.D11") },
+    { q: t("Agent.I12"), a:t("Agent.D12") },
+  ];
+  
+  const slideUp = {
+    hidden: { opacity: 0, y: 60 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } },
+  };
+
   const [showFixedNavbar, setShowFixedNavbar] = useState(false);
   const formRef = useRef(null);
   const [openFAQ, setOpenFAQ] = useState(null);
 
   useEffect(() => {
     const handleScroll = () => {
-      setShowFixedNavbar(window.scrollY > window.innerHeight * 0.6);
+      // ใช้ window.innerHeight * 0.6 ในการเทียบสเกลที่ถูกต้อง
+      setShowFixedNavbar(window.scrollY > window.innerHeight * 0.6); 
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
@@ -106,7 +111,7 @@ const Agent = memo(() => {
           animate="visible"
           className="relative z-10 text-white text-3xl sm:text-4xl md:text-5xl font-bold text-center px-4 leading-tight"
         >
-          ร่วมงานกับเรา (เอเจนท์)
+          {t("Agent.H")}
         </motion.h1>
       </section>
 
@@ -120,12 +125,10 @@ const Agent = memo(() => {
             variants={slideUp}
           >
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-              ทำไมต้องร่วมงานกับ Premium Asset
+             {t("Agent.H1")}
             </h2>
             <p className="text-lg text-gray-700 mb-12 max-w-2xl mx-auto">
-              เราเปิดรับเอเจนท์อสังหาฯ ที่มีความมุ่งมั่น
-              เพื่อร่วมเป็นส่วนหนึ่งในการเปลี่ยนแปลงตลาดบ้านมือสอง
-              ด้วยระบบการทำงานที่รวดเร็วและฐานลูกค้าที่แข็งแกร่ง
+              {t("Agent.H2")}
             </p>
           </motion.div>
 
@@ -136,9 +139,9 @@ const Agent = memo(() => {
             transition={{ duration: 0.5, delay: 0.3 }}
             className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left"
           >
-             <BenefitCard icon={BadgePercent} title="ค่าคอมมิชชั่นสูง" desc="รับค่าคอมมิชชั่นสูงสุดถึง 3% เมื่อช่วยขายบ้านตกแต่งใหม่จากโฮมรัน" />
-             <BenefitCard icon={Zap} title="ปิดการขายได้เร็ว" desc="เข้าถึงฐานลูกค้าโดยตรง พร้อมทรัพย์คุณภาพที่รีโนเวทแล้ว ทำให้การขายเร็วขึ้น" />
-             <BenefitCard icon={CheckCircle} title="สมัครฟรี ไม่มีข้อจำกัด" desc="ไม่มีค่าใช้จ่ายในการสมัคร และไม่มีข้อจำกัดในการเป็นตัวแทนเอเจนท์" />
+            <BenefitCard icon={BadgePercent} title= {t("Agent.T1")} desc={t("Agent.D1")} />
+            <BenefitCard icon={Zap} title= {t("Agent.T2")} desc={t("Agent.D2")} />
+            <BenefitCard icon={CheckCircle} title= {t("Agent.T3")} desc={t("Agent.D3")} />
           </motion.div>
         </div>
       </section>
@@ -152,7 +155,7 @@ const Agent = memo(() => {
             variants={slideUp}
             className="text-3xl md:text-4xl font-bold text-gray-900 mb-16"
           >
-            4 ขั้นตอนง่ายๆ ในการร่วมงาน
+            {t("Agent.H3")}
           </motion.h2>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
             {agentSteps.map((step, index) => (
@@ -177,7 +180,7 @@ const Agent = memo(() => {
         </div>
       </section>
 
-      {/* Section เครื่องมือและการสนับสนุน  */}
+      {/* Section เครื่องมือและการสนับสนุน  */}
       <section className="w-full py-20 bg-gray-50">
         <div className="max-w-5xl mx-auto px-6">
           <motion.h2
@@ -187,7 +190,7 @@ const Agent = memo(() => {
             variants={slideUp}
             className="text-3xl md:text-4xl font-bold text-gray-900 mb-16 text-center"
           >
-            เครื่องมือและการสนับสนุน
+            {t("Agent.T4")}
           </motion.h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {agentSupport.map((item, index) => (
@@ -228,7 +231,7 @@ const Agent = memo(() => {
             variants={slideUp}
             className="text-3xl md:text-4xl font-bold text-gray-900 mb-10 text-center"
           >
-            คำถามที่พบบ่อย
+           {t("FAQ.H4")}
           </motion.h2>
           <div className="space-y-4">
             {agentFAQ.map((item, index) => (
@@ -274,16 +277,16 @@ const Agent = memo(() => {
         className="text-center py-20 bg-white"
       >
         <h3 className="text-2xl font-bold text-gray-900 mb-4">
-          สนใจร่วมงานกับเรา?
+       {t("Agent.T5")}
         </h3>
         <p className="text-lg text-gray-700 mb-8">
-          กรอกข้อมูลด้านล่างเพื่อสมัครเป็นตัวแทนเอเจนท์กับเราได้ทันที
+         {t("Agent.T6")}
         </p>
         <button
           onClick={scrollToForm}
           className="inline-block bg-[#bfa074] text-white px-8 py-3 rounded-full font-medium hover:bg-[#a38a5c] cursor-pointer transition text-lg shadow-lg hover:shadow-xl"
         >
-          สมัครเป็นเอเจนท์
+         {t("Agent.T7")}
         </button>
       </motion.div>
 

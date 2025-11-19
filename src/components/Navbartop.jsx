@@ -161,10 +161,10 @@ const Navbar = () => {
                 </button>
               </div>
 
-              <NavLink to="/sell" onClick={() => setMenuOpen(false)}>
+              <NavLink to="/Project/Sell" onClick={() => setMenuOpen(false)}>
                 {t("navbar.sell")}
               </NavLink>
-              <NavLink to="/buy" onClick={() => setMenuOpen(false)}>
+              <NavLink to="/Project/buy" onClick={() => setMenuOpen(false)}>
                 {t("navbar.buy")}
               </NavLink>
               <NavLink to="/agent" onClick={() => setMenuOpen(false)}>

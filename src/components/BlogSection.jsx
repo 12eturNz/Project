@@ -1,29 +1,32 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const BlogSection = () => {
+  const { t } = useTranslation();
   const blogs = [
+    
     {
       id: 1,
       date: "November 16, 2025",
-      title: "ตลาดอสังหาฯ แนวโน้มซึมยาว",
-      category: "การลงทุน",
+      title:  t("Blog.title"),
+      category: t("Blog.category"),
       image: "https://news.thaipbs.or.th/media/Dms94pzOffeDNs7S1pUs9KVQW5qkVZr9Nn.jpg",
       link: "/blog/9",
     },
     {
       id: 2,
       date: "October 24, 2025",
-      title: "อสังหาฯ เพิ่มขึ้น 25.1%",
-      category: "การลงทุน",
+      title: t("Blog.title1"),
+      category: t("Blog.category"),
       image: "https://www.infoquest.co.th/dxt-content/uploads/2025/03/20250320_IQMY_Stock-Graph-1024x576.png",
       link: "/blog/7",
     },
     {
       id: 3,
       date: "November 10, 2025",
-      title: "อสังหาฯ ใน UK ทรุด”",
-      category: "ข่าวใหม่",
+      title:  t("Blog.title2"),
+      category:  t("Blog.category1"),
       image: "https://www.infoquest.co.th/dxt-content/uploads/2025/06/20250618_IQMY_UK-1024x576.png",
       link: "/blog/8",
     },
@@ -65,7 +68,7 @@ const BlogSection = () => {
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
           className="border border-gray-400 text-gray-700 px-8 py-2 rounded-full hover:bg-gray-800 hover:text-white transition duration-300"
         >
-          ดูทั้งหมด
+         {t("Blog.Search")}
         </Link>
       </div>
     </section>
