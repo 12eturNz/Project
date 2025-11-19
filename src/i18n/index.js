@@ -301,7 +301,43 @@ i18n.use(initReactI18next).init({
                                             Review:{
                                               H:" รีวิวจริงจากลูกค้า & เอเจนท์",
 
-                                            }
+                                            },
+
+                                          Partner:{
+                                            P1:"นักลงทุน ",
+                                             P2:"ผู้รับเหมา / บริษัทก่อสร้าง",
+                                              P3:"บริษัทออกแบบ / ตกแต่งภายใน",
+                                               P4:"ซัพพลายเออร์วัสดุก่อสร้าง",
+                                                P5:"สถาบันการเงิน",
+                                                 P6:"พันธมิตรอื่นๆ",
+                                                  P7:"คู่ค้า ",
+                                                   P8:"ร่วมทุน ",
+                                                    P9:"พันธมิตร ",
+
+                                                    D1:"เข้าถึงดีลอสังหาฯ ที่ผ่านการคัดเลือก (Off-Market Deals) พร้อมทีมงานรีโนเวทและขายออกครบวงจร",
+                                                    D2:"รับงานรีโนเวทอย่างต่อเนื่อง (Consistent Project Pipeline) จากเรา ลดภาระการหางานเอง",
+                                                    D3:"รับงานรีโนเวทอย่างต่อเนื่อง (Consistent Project Pipeline) จากเรา ลดภาระการหางานเอง",
+                                                    D4:"เป็น Preferred Supplier ให้กับโครงการรีโนเวททั้งหมดของเรา สร้างยอดขายที่มั่นคง",
+                                                    D5:"ร่วมมือปล่อยสินเชื่อให้ลูกค้าของเรา (Qualified Leads) ที่ผ่านการตรวจสอบเบื้องต้นแล้ว",
+                                                    D6:"เรามองหาพันธมิตรที่มีวิสัยทัศน์เดียวกัน เพื่อสร้างนวัตกรรมและยกระดับตลาด",
+                                                    D7:"สำหรับผู้รับเหมา, ดีไซเนอร์, ซัพพลายเออร์ ที่ผ่านการคัดเลือก เพื่อรับงานในโปรเจกต์ของเรา",
+                                                    D8:"สำหรับนักลงทุนที่สนใจร่วมลงทุนในโปรเจกต์รีโนเวทอสังหาฯ เพื่อสร้างผลตอบแทน",
+                                                    D9:"ความร่วมมือเชิงกลยุทธ์กับสถาบันการเงิน หรือบริษัทเทคโนโลยี เพื่อสร้าง Ecosystem",
+
+                                                    H1:" พาร์ทเนอร์ทางธุรกิจ",
+                                                     H2:" สร้างโอกาสเติบโตไปด้วยกัน ",
+                                                       H3:" Premium Asset ไม่ได้เป็นเพียงบริษัทอสังหาฯแต่เรากำลังสร้าง Ecosystem ที่แข็งแกร่งเพื่อยกระดับตลาดอสังหาฯ มือสองเราเชื่อมั่นในการเติบโตไปพร้อมกับพาร์ทเนอร์ของเรา",
+                                                         H4:" รูปแบบการร่วมมือ",
+                                                         H5:" ผู้รับเหมาและบริษัทก่อสร้าง",
+                                                          H6:"  บริษัทออกแบบและตกแต่งภายใน",
+                                                           H7:" ซัพพลายเออร์วัสดุก่อสร้าง",
+                                                            H8:" หากคุณคือหนึ่งในธุรกิจเหล่านี้และมองเห็นโอกาสในการเติบโตร่วมกันเรายินดีพูดคุยและหาแนวทางความร่วมมือ",
+                                                             H9:" ร่วมเป็นพาร์ทเนอร์",
+
+
+
+                                                    }   
+                                          
                                           
 
 
@@ -615,7 +651,41 @@ i18n.use(initReactI18next).init({
                                             Review:{
                                               H:"Real reviews from customers & agents",
 
-                                            }
+                                            },
+
+                                            Partner:{
+                                              P1:"Investors",
+                                             P2:"Contractor / Construction Company",
+                                              P3:"Interior design/decoration company",
+                                               P4:"Construction material suppliers",
+                                                P5:"financial institutions",
+                                                 P6:"Other partners",
+                                                  P7:"Vendor List",
+                                                   P8:"Joint Venture",
+                                                    P9:"Strategic Alliance",
+
+                                                    D1:"Access to selected off-market real estate deals with a full-service renovation and sales team.",
+                                                    D2:"Receive continuous renovation work (Consistent Project Pipeline) from us, reducing the burden of finding work yourself.",
+                                                    D3:"Participate in creating works (Showcase) with our project and promote the works through sales channels.",
+                                                    D4:"Become a preferred supplier for all our renovation projects, generating consistent sales.",
+                                                    D5:"Collaborate in providing loans to our customers (Qualified Leads) who have passed the preliminary screening.",
+                                                    D6:"We are looking for partners with the same vision to innovate and enhance the market.",
+                                                    D7:"For selected contractors, designers, and suppliers to take on our projects.",
+                                                    D8:"For investors interested in investing in real estate renovation projects to generate returns",
+                                                    D9:"Strategic cooperation with financial institutions or technology companies to create an ecosystem",
+
+                                                     H1:"Business Partner",
+                                                     H2:"Creating opportunities for growth together ",
+                                                      H3:"Premium Asset is not just a real estate company.We are building a strong ecosystem to enhance the second-hand real estate market.We believe in growing alongside our partners.",
+                                                      H4:"Collaboration model",
+                                                         H5:"Contractors and construction companies",
+                                                          H6:"Interior design and decoration company",
+                                                           H7:"Construction material suppliers",
+                                                            H8:"If you are one of these businessesand see an opportunity for mutual growth,we'd love to discuss and explore ways to collaborate.",
+                                                             H9:"Become a partner",
+                                              
+                                          
+                                                    }
                                           
 
 
