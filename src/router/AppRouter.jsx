@@ -19,6 +19,15 @@ const PropertyDetail6 = lazy(() => import("../pages/PropertyDetail/PropertyDetai
 const PropertyDetail7 = lazy(() => import("../pages/PropertyDetail/PropertyDetail7"));
 const PropertyDetail8 = lazy(() => import("../pages/PropertyDetail/PropertyDetail8"));
 const PropertyDetail9 = lazy(() => import("../pages/PropertyDetail/PropertyDetail9"));
+const PropertyDetail10 = lazy(() => import("../pages/PropertyDetail/PropertyDetail10"));
+const PropertyDetail11 = lazy(() => import("../pages/PropertyDetail/PropertyDetail11"));
+const PropertyDetail12 = lazy(() => import("../pages/PropertyDetail/PropertyDetail12"));
+const PropertyDetail13 = lazy(() => import("../pages/PropertyDetail/PropertyDetail13"));
+const PropertyDetail14 = lazy(() => import("../pages/PropertyDetail/PropertyDetail14"));
+const PropertyDetail15 = lazy(() => import("../pages/PropertyDetail/PropertyDetail15"));
+const PropertyDetail16 = lazy(() => import("../pages/PropertyDetail/PropertyDetail16"));
+const PropertyDetail17 = lazy(() => import("../pages/PropertyDetail/PropertyDetail17"));
+const PropertyDetail18 = lazy(() => import("../pages/PropertyDetail/PropertyDetail18"));
 
 export default function AppRouter() {
   return (
@@ -42,6 +51,15 @@ export default function AppRouter() {
         <Route path="/PropertyDetail7" element={<PropertyDetail7/>} />
         <Route path="/PropertyDetail8" element={<PropertyDetail8/>} />
         <Route path="/PropertyDetail9" element={<PropertyDetail9/>} />
+        <Route path="/PropertyDetail10" element={<PropertyDetail10/>} />
+        <Route path="/PropertyDetail11" element={<PropertyDetail11/>} />
+        <Route path="/PropertyDetail12" element={<PropertyDetail12/>} />
+        <Route path="/PropertyDetail13" element={<PropertyDetail13/>} />
+        <Route path="/PropertyDetail14" element={<PropertyDetail14/>} />
+        <Route path="/PropertyDetail15" element={<PropertyDetail15/>} />
+        <Route path="/PropertyDetail16" element={<PropertyDetail16/>} />
+        <Route path="/PropertyDetail17" element={<PropertyDetail17/>} />
+        <Route path="/PropertyDetail18" element={<PropertyDetail18/>} />
       </Routes>
     </Suspense>
   );
