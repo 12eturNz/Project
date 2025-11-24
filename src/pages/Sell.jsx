@@ -9,7 +9,7 @@ import Footer from "../components/Footer";
 import PropertyTypeSection from "../components/PropertyTypeSection";
 import StepsWithHomerun from "../components/StepsWithHomerun";
 import FAQSection from "../components/FAQSection";
-import RegisterForm from "../components/RegisterFormSell";
+
 import img1 from "../assets/house1.jpg";
 import Navbarbottom from "../components/Navbarbottom";
 
