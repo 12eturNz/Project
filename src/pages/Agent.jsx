@@ -2,7 +2,7 @@ import React, { useState, useEffect, memo, useRef } from "react";
 import { motion } from "framer-motion";
 import Navbar from "../components/Navbartop";
 import Footer from "../components/Footer";
-import RegisterFormAgent from "../components/RegisterFormAgent";
+
 import ReviewCarousel from "../components/ReviewCarousel"; 
 import img1 from "../assets/house1.jpg";
 import { useTranslation } from "react-i18next";
@@ -268,39 +268,7 @@ const Agent = memo(() => {
         </div>
       </section>
 
-      {/* ปุ่ม Scroll ไปที่ฟอร์ม */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.5, delay: 0.5 }}
-        className="text-center py-20 bg-white"
-      >
-        <h3 className="text-2xl font-bold text-gray-900 mb-4">
-       {t("Agent.T5")}
-        </h3>
-        <p className="text-lg text-gray-700 mb-8">
-         {t("Agent.T6")}
-        </p>
-        <button
-          onClick={scrollToForm}
-          className="inline-block bg-[#bfa074] text-white px-8 py-3 rounded-full font-medium hover:bg-[#a38a5c] cursor-pointer transition text-lg shadow-lg hover:shadow-xl"
-        >
-         {t("Agent.T7")}
-        </button>
-      </motion.div>
-
-      {/* ส่วนฟอร์มรับสมัคร */}
-      <section ref={formRef} className="py-10 bg-white">
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-        >
-          <RegisterFormAgent />
-        </motion.div>
-      </section>
+     
 
       <Footer />
     </div>
