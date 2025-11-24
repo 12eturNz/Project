@@ -201,17 +201,7 @@ const Partner = memo(() => {
         </div>
       </section>
 
-      {/* Form */}
-      <section ref={formRef} className="py-10 bg-white">
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-        >
-          <RegisterFormPartner />
-        </motion.div>
-      </section>
+     
 
       <Footer />
     </div>
