@@ -42,6 +42,7 @@ i18n.use(initReactI18next).init({
         },
 
          WhyHomerun:{
+          
           Header:"ทำไมต้อง Premium Asset",
            Header1:"ขาย",
             Header2:"ซื้อ",
