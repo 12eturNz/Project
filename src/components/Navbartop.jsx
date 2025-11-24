@@ -102,7 +102,7 @@ const Navbar = () => {
             </div>
           ) : (
             <Link
-              to="/login"
+              to="/LoginRegister/"
               className="ml-4 bg-[#bfa074] text-white px-5 py-2 rounded-full shadow-md hover:bg-[#a38a5c] transition font-semibold"
             >
               Login
