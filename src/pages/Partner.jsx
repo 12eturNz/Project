@@ -2,7 +2,7 @@ import React, { useState, useEffect, memo, useRef } from "react";
 import { motion } from "framer-motion";
 import Navbar from "../components/Navbartop";
 import Footer from "../components/Footer";
-import RegisterFormPartner from "../components/RegisterFormPartner";
+
 import ReviewCarousel from "../components/ReviewCarousel";
 import img2 from "../assets/house2.jpg";
 import { useTranslation } from "react-i18next";

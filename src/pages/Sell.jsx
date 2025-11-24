@@ -123,17 +123,8 @@ const Sell = memo(() => {
         <FAQSection />
       </section>
 
-      {/* Register Form */}
-      <section id="register-form" ref={registerRef} className="mt-20 mb-16 px-3 sm:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-        >
-          <RegisterForm />
-        </motion.div>
-      </section>
+      
+     
 
       <Footer />
     </div>
