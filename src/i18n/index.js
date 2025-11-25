@@ -295,7 +295,7 @@ i18n.use(initReactI18next).init({
                                               H:" ซื้อบ้านรีโนเวทใหม่กับ",
                                               H1:" Premium Asset",
                                                H3:"Premium Collection",
-                                               P:" บ้านและคอนโดรีโนเวทตกแต่งใหม่แบบมีรับประกันโดยโฮมรันพร้อมเข้าอยู่หรือปล่อยเช่าได้ทันที",
+                                              P:" บ้านและคอนโดรีโนเวทตกแต่งใหม่แบบมีรับประกันโดยPremiumพร้อมเข้าอยู่หรือปล่อยเช่าได้ทันที",
 
                                             },
                                             Review:{
@@ -644,7 +644,7 @@ i18n.use(initReactI18next).init({
                                               H:" Buy a newly renovated house with",
                                               H1:" Premium Asset",
                                               H3:"Premium Collection",
-                                               P:" Newly renovated houses and condos with a Home Run guarantee, ready to move in or rent out immediately.",
+                                               P:" Newly renovated houses and condos with a Premium guarantee, ready to move in or rent out immediately.",
 
                                             },
 
