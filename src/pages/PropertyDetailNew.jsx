@@ -38,7 +38,6 @@ const formatNumber = (numStr) => {
 
 // Helper Component สำหรับกล่องข้อมูลสำคัญขนาดใหญ่ (InfoBlock)
 const InfoBlock = ({ title, value, unit, isPrice = false }) => (
-// ... (InfoBlock component code remains the same)
     <div className={`p-4 rounded-lg border border-gray-200 shadow-sm ${isPrice ? 'bg-orange-50' : 'bg-gray-50'}`}>
         <div className="text-sm text-gray-500 mb-1">{title}</div>
         <div className={`text-xl font-bold ${isPrice ? 'text-red-700' : 'text-gray-900'}`}>
@@ -51,10 +50,8 @@ const InfoBlock = ({ title, value, unit, isPrice = false }) => (
 // === Component: LoanCalculator (ระบบคำนวณสินเชื่อ) ===
 const LoanCalculator = ({ price }) => {
     // ดึงตัวเลขราคาขายจาก string (เช่น "฿25,900,000" -> 25900000)
-    // Note: ใช้ cleanNumber เพื่อให้แน่ใจว่าราคาที่ส่งมาคำนวณเป็นตัวเลขเท่านั้น
     const initialPrice = Number(cleanNumber(price)); 
     
-    // ... (LoanCalculator component code remains the same)
     const [loanAmount, setLoanAmount] = useState(initialPrice * 0.8); 
     const [rate, setRate] = useState(7.0); 
     const [years, setYears] = useState(30); 
@@ -66,7 +63,6 @@ const LoanCalculator = ({ price }) => {
 
     // ฟังก์ชันคำนวณผ่อนต่อเดือน
     const calculateMonthlyPayment = () => {
-        // ... (calculation logic remains the same)
         if (loanAmount <= 0 || rate <= 0 || years <= 0) return 0;
 
         const monthlyRate = (rate / 100) / 12; // อัตราดอกเบี้ยต่อเดือน
@@ -97,8 +93,6 @@ const LoanCalculator = ({ price }) => {
                 {/* วงเงินกู้ */}
                 <div>
                     <label className="block text-gray-700 mb-1">วงเงินกู้ (บาท)</label>
-                    {/* Note: Input for loan amount/rate/years can remain type="number" or type="text" 
-                       depending on desired UX. Keeping as type="number" for ease of use in this context. */}
                     <input 
                         type="number" 
                         value={Math.round(loanAmount)} 
@@ -108,7 +102,7 @@ const LoanCalculator = ({ price }) => {
                     />
                     <div className="text-xs text-gray-500 mt-1">เงินดาวน์: {new Intl.NumberFormat('th-TH').format(initialPrice - loanAmount)} ฿</div>
                 </div>
-                {/* ... (Rate and Years inputs remain the same) */}
+                
                 <div>
                     <label className="block text-gray-700 mb-1">อัตราดอกเบี้ย (% ต่อปี)</label>
                     <input 
@@ -134,7 +128,7 @@ const LoanCalculator = ({ price }) => {
             </div>
 
             {/* ผลการคำนวณ */}
-            <div className="mt-6 p-4 bg-[#f7f5ee] rounded-xl text-center border-2 border-[#bfa074]">
+            <div className="mt-6 p-4 bg-[#f7f5ee] rounded-xl border-2 border-[#bfa074] text-center">
                 <div className="text-sm font-medium text-gray-700">ประมาณผ่อนต่อเดือน</div>
                 <div className="text-3xl font-extrabold text-[#bfa074] mt-1">
                     {new Intl.NumberFormat('th-TH', { 
@@ -171,7 +165,10 @@ const PropertyDetailNew = () => {
             "วัสดุก่อสร้างคุณภาพดีเยี่ยม"
         ].join('\n') 
     };
-
+    
+    // 💡 FIX: เปลี่ยน URL ภาพสำรองให้ใช้งานได้จริง
+    const defaultImage = "https://placehold.co/600x400?text=Image+Not+Available"; 
+    
     const loadPropertyDetails = () => {
         try {
             const userListings = JSON.parse(localStorage.getItem('userListings')) || [];
@@ -186,12 +183,18 @@ const PropertyDetailNew = () => {
                 }, 3000); 
             } else {
                  if (!currentProperty.price) {
-                     currentProperty.price = "฿0";
+                     currentProperty.price = "0";
                 }
                 
-                // 💡 ทำความสะอาดข้อมูลตัวเลขตั้งแต่โหลด เพื่อเตรียมพร้อมสำหรับการแก้ไข
+                // **NEW: โหลดอาร์เรย์รูปภาพที่ส่งมาจาก RegisterForm**
+                const imagesArray = currentProperty.images || (currentProperty.image ? [currentProperty.image] : []);
+
+                // ทำความสะอาดข้อมูลตัวเลขตั้งแต่โหลด เพื่อเตรียมพร้อมสำหรับการแก้ไข
                 const finalProperty = {
                     ...currentProperty,
+                    // **ADDED: Store the array of image URLs**
+                    images: imagesArray, 
+                    
                     project: currentProperty.project || initialDummyData.project,
                     description: currentProperty.description || initialDummyData.description,
                     features: currentProperty.features || initialDummyData.features,
@@ -235,9 +238,8 @@ const PropertyDetailNew = () => {
         };
     }, []); 
 
-    // --- 💡 Handlers สำหรับการแก้ไขใหม่ ---
+    // --- Handlers สำหรับการแก้ไข ---
     
-    // Handler สำหรับช่องข้อความทั่วไป
     const handleTextChange = (e) => {
         const { name, value } = e.target;
         setEditableProperty(prev => ({
@@ -246,23 +248,19 @@ const PropertyDetailNew = () => {
         }));
     };
     
-    // Handler สำหรับตัวเลขที่ต้องการ Comma Separator (Price, Land, Area)
     const handleNumericChange = (e) => {
         const { name, value } = e.target;
-        // 1. Clean the input value (remove commas) to get the true number for state storage
+        // 💡 ใช้ cleanNumber เพื่อให้แน่ใจว่าค่าที่เก็บใน State ไม่มีคอมม่าและเป็นตัวเลขที่ถูกต้อง
         const cleanedValue = cleanNumber(value);
 
-        // 2. Update state with the clean value
         setEditableProperty(prev => ({
             ...prev,
             [name]: cleanedValue,
         }));
     };
     
-    // Handler สำหรับตัวเลขที่เป็นจำนวนเต็มขนาดเล็ก (Beds, Baths)
     const handleIntegerChange = (e) => {
         const { name, value } = e.target;
-        // Ensure it's a valid integer or empty
         const integerValue = String(value).replace(/[^\d]/g, ''); 
         
         setEditableProperty(prev => ({
@@ -271,7 +269,6 @@ const PropertyDetailNew = () => {
         }));
     };
 
-    // --- 💡 Handler Logic (Edit, Save, Cancel) Remains the Same ---
     const handleEdit = () => {
         setIsEditing(true);
     };
@@ -287,10 +284,9 @@ const PropertyDetailNew = () => {
             const index = userListings.findIndex((_, i) => i === 0); 
             
             if (index > -1) {
-                // Ensure numerical fields are saved as clean strings
                 const propertyToSave = {
                     ...editableProperty,
-                    // Note: Price, Land, Area are already cleaned in handleNumericChange, but double check.
+                    // 💡 ทำความสะอาดข้อมูลตัวเลขอีกครั้งก่อนบันทึก
                     price: cleanNumber(editableProperty.price || '0'), 
                     land: cleanNumber(editableProperty.land || '0'),
                     area: cleanNumber(editableProperty.area || '0'),
@@ -313,7 +309,7 @@ const PropertyDetailNew = () => {
             alert('เกิดข้อผิดพลาดในการบันทึกข้อมูล');
         }
     };
-    // --- End Handler Logic ---
+    // --- End Handlers ---
 
 
     if (loading) {
@@ -321,7 +317,6 @@ const PropertyDetailNew = () => {
     }
 
     if (error || !property) {
-        // ... (Error handling remains the same)
         return (
             <div className="min-h-screen bg-gray-100"> 
                 <motion.div 
@@ -338,13 +333,35 @@ const PropertyDetailNew = () => {
         );
     }
 
-    const defaultImage = "https://via.placeholder.com/600x400?text=Image+Not+Available";
     const tags = ['Single Detached House', '5 reviews', '4 Q&A'];
     
     const pricePerSqm = '507,842'; 
     const pricePerSqmUnit = '฿/ตร.ม.';
     const featuresList = (property.features || initialDummyData.features).split('\n');
+    
+    // **NEW: Prepare images for display from the 'images' array**
+    const imagesToDisplay = property.images || [property.image || defaultImage];
+    const mainImage = imagesToDisplay[0] || defaultImage;
+    const thumbnailImages = imagesToDisplay.slice(1, 5); // Get up to 4 thumbnails
 
+    // Utility function to render an image container
+    const ImageContainer = ({ src, alt, className }) => (
+        <div className={className}>
+            <img 
+                src={src} 
+                alt={alt} 
+                className="w-full h-full object-cover" 
+                // 💡 FIX: On error, fall back to the working defaultImage URL
+                onError={(e) => { e.target.onerror = null; e.target.src = defaultImage; }}
+            />
+        </div>
+    );
+    
+    // Add placeholder images if less than 4 thumbnails are available
+    while (thumbnailImages.length < 4) {
+        // Use the working defaultImage for the missing slots
+        thumbnailImages.push({ src: defaultImage, alt: `Gallery ${thumbnailImages.length + 1}` }); 
+    }
 
     return (
         <div className="min-h-screen bg-gray-100 pb-10"> 
@@ -354,30 +371,27 @@ const PropertyDetailNew = () => {
                 transition={{ duration: 0.5 }}
                 className="max-w-6xl mx-auto p-4 md:p-8 my-10 bg-white rounded-xl shadow-lg border border-gray-100" 
             >
-                {/* 1. ส่วนรูปภาพหลัก (Remains the same) */}
+                {/* 1. ส่วนรูปภาพหลัก (Modified to use imagesToDisplay) */}
                 <div className="grid grid-cols-4 grid-rows-2 gap-2 mb-8 h-[500px]">
-                    {/* ... (Image grid code remains the same) */}
-                    <div className="col-span-2 row-span-2 rounded-xl overflow-hidden shadow-md">
-                        <img 
-                            src={property.image} 
-                            alt={property.project} 
-                            className="w-full h-full object-cover" 
-                            onError={(e) => { e.target.onerror = null; e.target.src = defaultImage; }}
+                    
+                    {/* รูปภาพหลัก */}
+                    <ImageContainer 
+                        src={mainImage} 
+                        alt={property.project} 
+                        className="col-span-2 row-span-2 rounded-xl overflow-hidden shadow-md" 
+                    />
+
+                    {/* รูปภาพย่อย 4 รูป */}
+                    {thumbnailImages.map((img, index) => (
+                         // If the image is a URL string, use it. If it's the placeholder object, use its src.
+                        <ImageContainer 
+                            key={index}
+                            src={typeof img === 'string' ? img : img.src} 
+                            alt={`Thumbnail ${index + 1}`} 
+                            className="col-span-1 row-span-1 rounded-xl overflow-hidden shadow-md"
                         />
-                    </div>
-                    {/* ... (Smaller images code remains the same) */}
-                    <div className="col-span-1 row-span-1 rounded-xl overflow-hidden shadow-md">
-                        <img src="https://via.placeholder.com/300x250?text=Interior+1" alt="Interior 1" className="w-full h-full object-cover" />
-                    </div>
-                    <div className="col-span-1 row-span-1 rounded-xl overflow-hidden shadow-md">
-                        <img src="https://via.placeholder.com/300x250?text=Interior+2" alt="Interior 2" className="w-full h-full object-cover" />
-                    </div>
-                    <div className="col-span-1 row-span-1 rounded-xl overflow-hidden shadow-md">
-                        <img src="https://via.placeholder.com/300x250?text=Interior+3" alt="Interior 3" className="w-full h-full object-cover" />
-                    </div>
-                    <div className="col-span-1 row-span-1 rounded-xl overflow-hidden shadow-md">
-                        <img src="https://via.placeholder.com/300x250?text=Interior+4" alt="Interior 4" className="w-full h-full object-cover" />
-                    </div>
+                    ))}
+
                 </div>
 
                 {/* 2. ส่วนรายละเอียดหลัก & คอลัมน์ด้านข้าง */}
@@ -405,22 +419,21 @@ const PropertyDetailNew = () => {
                                 </h2>
                                 
                                 <p className="text-3xl font-bold text-gray-900 mt-3 flex items-baseline gap-3">
-                                    {/* Price (Editable) 💡 ใช้ handleNumericChange และ formatNumber */}
+                                    {/* Price (Editable) */}
                                     {isEditing ? (
                                         <div className="flex items-center">
                                             <span className="mr-1">฿</span>
                                             <input 
-                                                type="text" // Must be text to allow comma display
+                                                type="text" 
                                                 name="price"
-                                                // Display formatted number
-                                                value={formatNumber(editableProperty?.price || '')} 
-                                                onChange={handleNumericChange}
+                                                value={formatNumber(editableProperty?.price || '')} // 💡 แสดงผลพร้อมคอมม่า
+                                                onChange={handleNumericChange} // 💡 เก็บค่าที่ไม่มีคอมม่า
                                                 className="border-b border-gray-300 focus:border-[#bfa074] text-3xl font-bold text-gray-900 w-48"
                                                 placeholder="XX,XXX,XXX"
                                             />
                                         </div>
                                     ) : (
-                                        `฿${formatNumber(property.price)}` // Display formatted
+                                        `฿${formatNumber(property.price)}` // แสดงผลพร้อมคอมม่า
                                     )}
                                     <span className="text-base font-normal text-red-600 ml-2">-11%</span> 
                                 </p>
@@ -445,7 +458,7 @@ const PropertyDetailNew = () => {
                                 </div>
                             </div>
                             
-                            {/* 💡 ปุ่มแก้ไข/บันทึก/ยกเลิก (Remains the same) */}
+                            {/* ปุ่มแก้ไข/บันทึก/ยกเลิก */}
                             {userRole === 'Agent' && (
                                 <div className="flex gap-2 flex-shrink-0">
                                     {!isEditing ? (
@@ -522,29 +535,29 @@ const PropertyDetailNew = () => {
                             <Ruler size={20} className="text-gray-500" /> พื้นที่
                         </h3>
                         <div className="grid grid-cols-3 gap-4 mb-8">
-                            {/* พื้นที่ดิน (Editable) 💡 ใช้ handleNumericChange และ formatNumber */}
+                            {/* พื้นที่ดิน (Editable) */}
                             <InfoBlock 
                                 title="พื้นที่ดิน" 
                                 value={isEditing ? (
                                     <input 
-                                        type="text" // Must be text to allow comma display
+                                        type="text" 
                                         name="land"
-                                        value={formatNumber(editableProperty?.land || '')} 
-                                        onChange={handleNumericChange}
+                                        value={formatNumber(editableProperty?.land || '')} // 💡 แสดงผลพร้อมคอมม่า
+                                        onChange={handleNumericChange} // 💡 เก็บค่าที่ไม่มีคอมม่า
                                         className="border-b text-xl font-bold text-gray-900 w-full bg-transparent focus:border-[#bfa074]"
                                     />
                                 ) : formatNumber(property.land)} 
                                 unit="ตร.ว." 
                             />
-                            {/* พื้นที่ใช้สอย (Editable) 💡 ใช้ handleNumericChange และ formatNumber */}
+                            {/* พื้นที่ใช้สอย (Editable) */}
                             <InfoBlock 
                                 title="พื้นที่ใช้สอย" 
                                 value={isEditing ? (
                                     <input 
-                                        type="text" // Must be text to allow comma display
+                                        type="text" 
                                         name="area"
-                                        value={formatNumber(editableProperty?.area || '')} 
-                                        onChange={handleNumericChange}
+                                        value={formatNumber(editableProperty?.area || '')} // 💡 แสดงผลพร้อมคอมม่า
+                                        onChange={handleNumericChange} // 💡 เก็บค่าที่ไม่มีคอมม่า
                                         className="border-b text-xl font-bold text-gray-900 w-full bg-transparent focus:border-[#bfa074]"
                                     />
                                 ) : formatNumber(property.area)} 
@@ -559,13 +572,13 @@ const PropertyDetailNew = () => {
                             <Bed size={20} className="text-gray-500" /> ข้อมูลเบื้องต้น
                         </h3>
                         <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm text-gray-700 mb-8">
-                            {/* ห้องนอน (Editable) 💡 ใช้ handleIntegerChange */}
+                            {/* ห้องนอน (Editable) */}
                             <div className="flex items-center gap-2">
                                 <Bed size={16} className="text-gray-500" /> ห้องนอน: 
                                 <span className="font-semibold text-gray-900">
                                     {isEditing ? (
                                         <input 
-                                            type="text" // Change to text for better mobile UX, and use handleIntegerChange
+                                            type="text" 
                                             name="beds"
                                             value={editableProperty?.beds || ''} 
                                             onChange={handleIntegerChange}
@@ -574,13 +587,13 @@ const PropertyDetailNew = () => {
                                     ) : property.beds || '-'}
                                 </span>
                             </div>
-                            {/* ห้องน้ำ (Editable) 💡 ใช้ handleIntegerChange */}
+                            {/* ห้องน้ำ (Editable) */}
                             <div className="flex items-center gap-2">
                                 <Bath size={16} className="text-gray-500" /> ห้องน้ำ: 
                                 <span className="font-semibold text-gray-900">
                                     {isEditing ? (
                                         <input 
-                                            type="text" // Change to text and use handleIntegerChange
+                                            type="text" 
                                             name="baths"
                                             value={editableProperty?.baths || ''} 
                                             onChange={handleIntegerChange}
@@ -600,13 +613,14 @@ const PropertyDetailNew = () => {
                             </div>
                         </div>
 
-                        {/* ข้อมูลโครงการ (Remains the same) */}
+                        {/* ข้อมูลโครงการ */}
                         <div className="p-6 bg-gray-50 rounded-xl border border-gray-200 shadow-sm">
                             <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2 border-b pb-2">
                                 <HardHat size={20} className="text-[#bfa074]" /> ข้อมูลโครงการ
                             </h3>
                             <div className="flex items-center gap-4 bg-white p-3 rounded-lg border border-gray-200">
-                                <img src={"https://via.placeholder.com/100x100?text=Project+Logo"} alt="Project Thumb" className="w-16 h-16 object-cover rounded-md" />
+                                {/* 💡 แก้ไข URL Placeholder ที่นี่ด้วย */}
+                                <img src={"https://placehold.co/100x100?text=Project+Logo"} alt="Project Thumb" className="w-16 h-16 object-cover rounded-md" />
                                 <div>
                                     <div className="text-sm text-gray-500">โครงการ</div>
                                     <div className="font-semibold text-gray-800">{property.project}</div>
@@ -619,7 +633,7 @@ const PropertyDetailNew = () => {
                     {/* คอลัมน์ขวา (ติดต่อ & สินเชื่อ) - 1/3 ส่วน */}
                     <div className="lg:col-span-1 space-y-6">
                         
-                        {/* กล่องติดต่อผู้โพสต์ (Editable) 💡 ใช้ handleTextChange */}
+                        {/* กล่องติดต่อผู้โพสต์ (Editable) */}
                         <div className="p-6 bg-white rounded-xl border border-gray-200 shadow-lg">
                             <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2 border-b pb-2">
                                 <User size={20} className="text-[#bfa074]" /> ติดต่อผู้โพสต์
@@ -679,10 +693,8 @@ const PropertyDetailNew = () => {
                             </div>
                         </div>
                         
-                        {/* === ระบบคำนวณสินเชื่อ Realtime === */}
-                        {/* Note: ส่งค่า price ที่เป็นตัวเลข clean แล้วไปคำนวณ */}
+                        {/* ระบบคำนวณสินเชื่อ Realtime */}
                         {editableProperty?.price && <LoanCalculator price={editableProperty.price} />} 
-                        {/* ============================================== */}
                     </div>
                 </div>
                 
@@ -691,7 +703,7 @@ const PropertyDetailNew = () => {
                     <h3 className="text-xl font-bold text-gray-800 mb-3 border-b pb-2 flex items-center gap-2">
                         <ShieldCheck size={20} className="text-[#bfa074]" /> สิ่งอำนวยความสะดวก
                     </h3>
-                    {/* Facilities (Editable) 💡 ใช้ handleTextChange */}
+                    {/* Facilities (Editable) */}
                     {isEditing ? (
                         <textarea
                             name="facilities"
