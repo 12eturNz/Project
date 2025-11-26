@@ -226,7 +226,7 @@ const Navbar = ({ onSellClick }) => {
                         handleLogout();
                         setMenuOpen(false);
                         }}
-                        className="w-full bg-white border border-gray-200 text-gray-600 py-2 rounded-lg text-sm font-medium hover:bg-gray-50 transition"
+                        className="block w-full bg-[#bfa074] text-white text-center py-3 rounded-xl font-bold hover:bg-[#a38a5c] transition shadow-md"
                     >
                         Logout
                     </button>

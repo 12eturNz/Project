@@ -162,9 +162,12 @@ i18n.use(initReactI18next).init({
                       Sell:{
                         H:"ขายบ้านกับ",
                         H1:"Premium Asset",
+                        HH:"Premium Asset",
+                        HHH:"มี",
+                        
                            H2:"ประเภททรัพย์ที่",
-                           H3:"Premium",
-                           H4:"นำมารีโนเวท",
+                           H3:"ฝากขายผ่าน Agent",
+                           H4:"กับทาง Premium",
                            H5:" 5 ขั้นตอน",
                            H6:"เสนอทรัพย์",
                            H7:"กับ Premium Asset",
@@ -517,9 +520,13 @@ i18n.use(initReactI18next).init({
         Sell:{
                        H:"Sell ​​with",
                         H1:"Premium Asset",
+
+                         HH:"Premium Asset",
+                        HHH:"Have",
+
                         H2:"Types of assets",
-                         H3:"Premium",
-                          H4:"Renovated",
+                         H3:"Consignment through an agent",
+                          H4:"With Premium",
                           H5:"5 steps",
                            H6:"Offer assets",
                            H7:"With Premium Asset",

@@ -40,8 +40,8 @@ const PropertyTypeSection = memo(() => {
           className="text-center text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-14"
         >
           {t("Sell.H2")}{" "}
-          <span className="text-[#bfa074] font-bold">{t("Sell.H3")}</span>{" "}
-          {t("Sell.H4")}
+          <span className="text-[#bfa074] font-bold">{t("Sell.HH")}</span>{" "}
+          {t("Sell.HHH")}
         </motion.h2>
 
         {/* Property Type Cards */}

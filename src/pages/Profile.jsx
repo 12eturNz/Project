@@ -54,8 +54,11 @@ const ApplicantDetailsCard = ({ applicant, onBack }) => {
                     <input disabled value={applicant.username} className="w-full p-3 rounded-lg border-transparent bg-gray-50 text-gray-700 cursor-default" />
                 </FormGroup>
 
-                <FormGroup label={`วันที่สมัครเป็น ${applicant.role}`}>
-                    <input disabled value={applicant.applicationDate || 'ไม่ระบุ'} className="w-full p-3 rounded-lg border-transparent bg-gray-50 text-gray-700 cursor-default" />
+                 <FormGroup label="อีเมล">
+                    <div className="relative">
+                        <Mail size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                        <input disabled value={applicant.email || '-'} className="w-full p-3 pl-10 rounded-lg border-transparent bg-gray-50 text-gray-700 cursor-default" />
+                    </div>
                 </FormGroup>
 
                 <FormGroup label="ชื่อจริง">
@@ -66,12 +69,7 @@ const ApplicantDetailsCard = ({ applicant, onBack }) => {
                     <input disabled value={applicant.lastName || '-'} className="w-full p-3 rounded-lg border-transparent bg-gray-50 text-gray-700 cursor-default" />
                 </FormGroup>
 
-                <FormGroup label="อีเมล">
-                    <div className="relative">
-                        <Mail size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                        <input disabled value={applicant.email || '-'} className="w-full p-3 pl-10 rounded-lg border-transparent bg-gray-50 text-gray-700 cursor-default" />
-                    </div>
-                </FormGroup>
+               
 
                 <FormGroup label="เบอร์โทรศัพท์">
                     <div className="relative">
@@ -80,11 +78,15 @@ const ApplicantDetailsCard = ({ applicant, onBack }) => {
                     </div>
                 </FormGroup>
 
+                 <FormGroup label="ID Line">
+                    <input disabled value={applicant.ID|| '-'} className="w-full p-3 rounded-lg border-transparent bg-gray-50 text-gray-700 cursor-default" />
+                </FormGroup>
+
                 <div className="md:col-span-2">
                     <FormGroup label="ที่อยู่">
                         <div className="relative">
                             <MapPin size={18} className="absolute left-3 top-4 text-gray-400" />
-                            <textarea disabled rows="3" value={applicant.address || '-'} className="w-full p-3 pl-10 rounded-lg border-transparent bg-gray-50 text-gray-700 cursor-default resize-none" />
+                            <textarea disabled rows="3" value={applicant.addressDetail || '-'} className="w-full p-3 pl-10 rounded-lg border-transparent bg-gray-50 text-gray-700 cursor-default resize-none" />
                         </div>
                     </FormGroup>
                 </div>
@@ -565,7 +567,7 @@ const Profile = () => {
                                                                 <div className="flex gap-2">
                                                                     <button 
                                                                         onClick={() => handleViewApplicant(app)}
-                                                                        className="px-4 py-1.5 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+                                                                        className="px-4 py-1.5 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition cursor-pointer"
                                                                     >
                                                                         ดูข้อมูล
                                                                     </button>
