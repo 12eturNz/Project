@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 
 import Navbar from "../components/Navbartop";
 import Navbarbottom from "../components/Navbarbottom";
-import SearchBar from "../components/SearchBar";
+
 import PropertyCard from "../components/PropertyCard";
 import ReviewCarousel from "../components/ReviewCarousel";
 import WhyHomerun from "../components/WhyHomerun";
@@ -143,17 +143,7 @@ const Home = () => {
           {t("homeSection.sectionBuyTitle")}
         </motion.h1>
 
-       {/* Search Bar */}
-        <motion.div
-          className="flex justify-center mb-12 md:mb-16 relative z-[1] overflow-visible"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ duration: 1.2, ease: 'easeInOut' }}
-        >
-          <div className="relative z-[1] bg-white shadow-xl rounded-3xl p-4 md:p-6 w-full max-w-[850px] backdrop-blur-md hover:shadow-2xl transition-all duration-500 overflow-visible">
-            <SearchBar />
-          </div>
-        </motion.div>
+       
 
         {/* Locations */}
         <div className="relative z-0 flex justify-center flex-wrap gap-4 md:gap-6 mb-12 md:mb-20 overflow-visible">

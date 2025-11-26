@@ -5,7 +5,8 @@ import Footer from "../components/Footer";
 import RegisterForm from "../components/RegisterForm"; 
 import {
     User, Mail, Phone, MapPin, Edit3, Camera, Save, CheckCircle, Shield,
-    Clock, LogOut, Briefcase, Handshake, Lock, Settings, Crown, Sparkles, ArrowRight, XCircle
+    Clock, LogOut, Briefcase, Handshake, Lock, Settings, Crown, Sparkles, ArrowRight, XCircle, Home,
+    Trash2, // 💡 เพิ่ม icon สำหรับการลบ
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -109,6 +110,65 @@ const ApplicantDetailsCard = ({ applicant, onBack }) => {
 };
 
 
+// --- 💡 คอมโพเนนต์ใหม่: UserListings สำหรับแสดงและจัดการการลบ ---
+const UserListings = ({ listings, role, onDelete }) => {
+    // กำหนดให้ Agent และ Admin สามารถลบได้
+    const canDelete = role === 'Agent' || role === 'Admin';
+
+    if (listings.length === 0) {
+        return (
+            <div className="text-center py-10 text-gray-500">
+                <p>คุณยังไม่มีรายการทรัพย์สินที่ลงทะเบียน</p>
+                <p className="text-sm mt-1">กรุณาไปที่หน้าลงทะเบียนเพื่อสร้างรายการใหม่</p>
+            </div>
+        );
+    }
+
+    return (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+            {listings.map((listing, index) => (
+                <motion.div 
+                    key={index}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.3, delay: index * 0.05 }}
+                    className="bg-white p-4 border rounded-xl shadow-sm flex flex-col sm:flex-row gap-4 relative hover:shadow-md transition-shadow"
+                >
+                    {/* ภาพและรายละเอียด (จำลอง) */}
+                    <img
+                        src={listing.image || "https://via.placeholder.com/600x400?text=Listing+Image"}
+                        alt={listing.title}
+                        className="w-full sm:w-28 h-24 object-cover rounded-lg flex-shrink-0"
+                        onError={(e) => {
+                            e.target.onerror = null; 
+                            e.target.src = "https://via.placeholder.com/600x400?text=Listing+Image";
+                        }}
+                    />
+                    <div className="flex-grow">
+                        <h4 className="font-bold text-base text-[#2c3e50] line-clamp-2">{listing.title || `รายการที่ ${index + 1}`}</h4>
+                        <p className="text-sm text-gray-500 line-clamp-1">{listing.location || 'ไม่ระบุที่ตั้ง'}</p>
+                        <p className="font-semibold text-lg text-[#bfa074] mt-1">{listing.price || 'ราคาไม่ระบุ'}</p>
+                    </div>
+
+                    {/* ปุ่มลบ - แสดงเฉพาะ Agent และ Admin */}
+                    {canDelete && (
+                        <button
+                            onClick={() => onDelete(index, listing.title || `รายการที่ ${index + 1}`)}
+                            className="absolute top-2 right-2 p-1.5 bg-red-100 text-red-600 rounded-full hover:bg-red-200 transition-colors duration-200"
+                            title={`ลบรายการ: ${listing.title || `รายการที่ ${index + 1}`}`}
+                        >
+                            <Trash2 size={18} />
+                        </button>
+                    )}
+                </motion.div>
+            ))}
+        </div>
+    );
+};
+// -------------------------------------------------------------
+
+
 const Profile = () => {
     const navigate = useNavigate();
     const fileInputRef = useRef(null);
@@ -127,6 +187,12 @@ const Profile = () => {
 
     // **New State:** เพื่อควบคุมว่าจะแสดง AdminDashboard หรือไม่
     const [showAdminDashboard, setShowAdminDashboard] = useState(false); 
+    
+    // **New State: เพื่อควบคุมว่าจะแสดง RegisterForm หรือไม่ (แทนที่กรอบดำ)**
+    const [showRegisterFormView, setShowRegisterFormView] = useState(false);
+    
+    // 💡 NEW STATE: สำหรับเก็บรายการทรัพย์สินของผู้ใช้ปัจจุบัน
+    const [userListings, setUserListings] = useState([]); 
 
 
     // Helper function to fetch and filter pending applications
@@ -140,6 +206,38 @@ const Profile = () => {
                 applicationDate: u.applicationDate || 'ไม่ระบุ' 
             })); 
         setPendingApplications(pending);
+    };
+    
+    // --- 💡 NEW LOGIC: ฟังก์ชันโหลดรายการทรัพย์สินจาก Local Storage ---
+    const loadUserListings = () => {
+         try {
+            // Note: This assumes listings are stored in 'userListings' in localStorage
+            const listings = JSON.parse(localStorage.getItem('userListings')) || []; 
+            setUserListings(listings);
+        } catch (error) {
+            console.error("Error loading user listings:", error);
+            setUserListings([]);
+        }
+    };
+    
+    // --- 💡 NEW LOGIC: ฟังก์ชันการลบรายการทรัพย์สิน ---
+    const handleDeleteListing = (indexToDelete, title) => {
+        if (window.confirm(`คุณแน่ใจหรือไม่ที่จะลบรายการ "${title}"? การดำเนินการนี้ไม่สามารถยกเลิกได้`)) {
+            try {
+                // สร้าง List ใหม่โดยการกรองรายการที่ถูกลบออก (โดยใช้ index)
+                const updatedListings = userListings.filter((_, index) => index !== indexToDelete);
+
+                // อัปเดต Local Storage และ State
+                localStorage.setItem('userListings', JSON.stringify(updatedListings));
+                setUserListings(updatedListings); 
+                
+                alert(`รายการ "${title}" ถูกลบเรียบร้อยแล้ว`);
+
+            } catch (error) {
+                console.error("Error deleting listing:", error);
+                alert("เกิดข้อผิดพลาดในการลบรายการ");
+            }
+        }
     };
 
 
@@ -165,6 +263,10 @@ const Profile = () => {
             if (userData.role === 'Admin') {
                 fetchPendingApplications(allUsers);
             }
+            
+            // 💡 NEW: Load user listings on component mount
+            loadUserListings(); 
+
         } else {
             navigate("/login");
         }
@@ -175,6 +277,8 @@ const Profile = () => {
         setSelectedApplicant(null);
         // **New:** Clear Admin Dashboard view
         setShowAdminDashboard(false); 
+        // **New:** Clear Register Form view
+        setShowRegisterFormView(false);
         setTempUser(user);
         setIsEditing(true);
     };
@@ -236,8 +340,24 @@ const Profile = () => {
     const handleNavigateToAdminDashboard = () => {
         setIsEditing(false); // ปิดโหมดแก้ไข
         setSelectedApplicant(null); // ปิดหน้าดูรายละเอียดผู้สมัคร
+        setShowRegisterFormView(false); // **เพิ่ม: ปิด Register Form**
         setShowAdminDashboard(true); // เปิดการแสดงผล Admin Dashboard
     };
+    
+    // **New Handler: สำหรับแสดง Register Form View**
+    const handleNavigateToRegisterFormView = () => {
+        setIsEditing(false); // ปิดโหมดแก้ไข
+        setSelectedApplicant(null); // ปิดหน้าดูรายละเอียดผู้สมัคร
+        setShowAdminDashboard(false); // ปิด Admin Dashboard
+        setShowRegisterFormView(true); // เปิดการแสดงผล Register Form
+    }
+
+    // **New Handler: สำหรับย้อนกลับจาก Register Form View ไปหน้าโปรไฟล์**
+    const handleBackToProfile = () => {
+        setShowRegisterFormView(false);
+        // 💡 เมื่อย้อนกลับจากฟอร์ม อาจจะต้องโหลดรายการโพสต์อีกครั้งหากมีการโพสต์สำเร็จ
+        loadUserListings(); 
+    }
 
 
     const triggerFileInput = () => {
@@ -248,6 +368,7 @@ const Profile = () => {
     const handleViewApplicant = (applicant) => {
         setIsEditing(false); // Make sure editing mode is off
         setShowAdminDashboard(false); // ปิด Admin Dashboard ก่อนเปิด Applicant Detail
+        setShowRegisterFormView(false); // **เพิ่ม: ปิด Register Form**
         setSelectedApplicant(applicant);
     };
     
@@ -397,7 +518,7 @@ const Profile = () => {
                                                     <Clock size={12} className="mr-1.5" /> รอการอนุมัติ
                                                 </span>
                                             )}
-                                            {/* **แก้ไข:** เปลี่ยนข้อความให้เป็นภาษาไทยตามรูปภาพ */}
+                                            {/* **แก้ไข**: เปลี่ยนข้อความให้เป็นภาษาไทยตามรูปภาพ */}
                                             {applicationStatus === 'Rejected' && (
                                                 <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-red-500 text-white">
                                                     <Lock size={12} className="mr-1.5" /> ถูกปฏิเสธ
@@ -459,6 +580,31 @@ const Profile = () => {
                                         </li>
                                     </ul>
                                 </div>
+                            )}
+
+                            {/* **1. เพิ่ม: ปุ่มสลับไปลงประกาศ (สำหรับผู้ที่ได้รับการอนุมัติแล้ว)** */}
+                            {applicationStatus === 'Approved' && (
+                                <motion.div
+                                    initial={{ opacity: 0, scale: 0.95 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    className={`p-1.5 bg-gradient-to-r ${showRegisterFormView ? 'from-green-500 to-green-700' : 'from-gray-300 to-gray-400'} rounded-2xl shadow-md cursor-pointer hover:shadow-lg transition duration-200`}
+                                    onClick={handleNavigateToRegisterFormView}
+                                >
+                                    <div className={`p-5 rounded-xl flex items-center justify-between ${showRegisterFormView ? 'bg-green-50' : 'bg-white hover:bg-gray-50'}`}>
+                                        <div className="flex items-center gap-4">
+                                            <div className={`p-3 rounded-full ${showRegisterFormView ? 'bg-white' : 'bg-gray-100'}`}>
+                                                <Home size={24} className={showRegisterFormView ? 'text-green-600' : 'text-gray-700'} />
+                                            </div>
+                                            <div>
+                                                <h3 className="text-base font-bold text-gray-800 flex items-center gap-2">
+                                                    ลงประกาศอสังหาฯ
+                                                </h3>
+                                                <p className="text-xs text-gray-500">โพสรายการขาย/เช่าใหม่</p>
+                                            </div>
+                                        </div>
+                                        <ArrowRight size={20} className={showRegisterFormView ? 'text-green-600' : 'text-gray-500'} />
+                                    </div>
+                                </motion.div>
                             )}
 
                             {/* 1. **เพิ่ม: Status Card (สถานะการอนุมัติ) - เหมือนในรูป** */}
@@ -550,7 +696,7 @@ const Profile = () => {
                         <div className="lg:col-span-8 space-y-8"> 
                             
                             {/* Conditional Message Box */}
-                            {(user.role === 'Agent' || user.role === 'Partner') && user.isApproved !== true && !selectedApplicant && !showAdminDashboard && (
+                            {(user.role === 'Agent' || user.role === 'Partner') && user.isApproved !== true && !selectedApplicant && !showAdminDashboard && !showRegisterFormView && (
                                 <motion.div
                                     initial={{ opacity: 0, y: -20 }}
                                     animate={{ opacity: 1, y: 0 }}
@@ -579,7 +725,7 @@ const Profile = () => {
                                 </motion.div>
                             )}
 
-                            {/* **ส่วนข้อมูลส่วนตัว / Admin Dashboard / Applicant Details** */}
+                            {/* **ส่วนข้อมูลส่วนตัว / Admin Dashboard / Applicant Details / Register Form View** */}
                             <AnimatePresence mode="wait">
                                 {selectedApplicant ? (
                                     // 1. แสดงข้อมูลผู้สมัครที่เลือก
@@ -588,8 +734,8 @@ const Profile = () => {
                                         applicant={selectedApplicant} 
                                         onBack={handleBackFromApplicantDetails} 
                                     />
-                                ) : showAdminDashboard ? ( // <<<< เงื่อนไขใหม่: แสดง Admin Dashboard
-                                    // 2. แสดง AdminDashboard (ส่ง onBack prop ไปด้วย)
+                                ) : showAdminDashboard ? ( 
+                                    // 2. แสดง AdminDashboard
                                     <motion.div key="admin-dashboard-view"
                                         initial={{ opacity: 0, x: -20 }}
                                         animate={{ opacity: 1, x: 0 }}
@@ -598,8 +744,32 @@ const Profile = () => {
                                     >
                                         <AdminDashboard onBack={() => setShowAdminDashboard(false)}/> 
                                     </motion.div>
+                                ) : showRegisterFormView ? ( 
+                                    // **3. New: แสดง RegisterForm View (แทนที่กรอบดำ)**
+                                    <motion.div
+                                        key="register-form-view"
+                                        initial={{ opacity: 0, x: -20 }}
+                                        animate={{ opacity: 1, x: 0 }}
+                                        exit={{ opacity: 0, x: 20 }}
+                                        transition={{ delay: 0.1, duration: 0.2 }}
+                                        className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8"
+                                    >
+                                        <div className="flex items-center justify-between mb-8 pb-4 border-b border-gray-100">
+                                            <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
+                                                <Home className="text-[#2c3e50]" size={24} />
+                                                ลงประกาศอสังหาฯ ใหม่
+                                            </h2>
+                                            <button
+                                                onClick={handleBackToProfile}
+                                                className="flex items-center gap-2 text-gray-500 hover:text-gray-700 font-medium text-sm transition px-4 py-2 rounded-full hover:bg-gray-100 cursor-pointer"
+                                            >
+                                                <ArrowRight size={16} className="rotate-180" /> ย้อนกลับไปหน้าข้อมูลส่วนตัว
+                                            </button>
+                                        </div>
+                                        <RegisterForm />
+                                    </motion.div>
                                 ) : (
-                                    // 3. แสดงข้อมูลส่วนตัวของผู้ใช้ปัจจุบัน (เป็น Default)
+                                    // 4. แสดงข้อมูลส่วนตัวของผู้ใช้ปัจจุบัน (เป็น Default)
                                     <motion.div
                                         key="user-profile"
                                         initial={{ opacity: 0, x: -20 }}
@@ -703,19 +873,33 @@ const Profile = () => {
                                                 )}
                                             </AnimatePresence>
                                         </form>
+                                        
+                                        
+                                        {/* --- 💡 NEW: ส่วนแสดงรายการทรัพย์สินที่โพสต์ (พร้อมปุ่มลบ) --- */}
+                                        {/* แสดงเมื่อเป็น Agent ที่ได้รับการอนุมัติ, Partner ที่ได้รับการอนุมัติ หรือ Admin */}
+                                        {((user.role === 'Agent' || user.role === 'Partner') && applicationStatus === 'Approved') || user.role === 'Admin' ? (
+                                            <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 mt-8">
+                                                <h3 className="text-xl font-bold text-[#2c3e50] border-b pb-3 mb-4 flex items-center gap-2">
+                                                    <Home size={20} className="text-[#bfa074]" /> รายการทรัพย์สินที่โพสต์ ({userListings.length})
+                                                </h3>
+                                                <AnimatePresence>
+                                                    <UserListings 
+                                                        listings={userListings} 
+                                                        role={user.role} 
+                                                        onDelete={handleDeleteListing} 
+                                                    />
+                                                </AnimatePresence>
+                                            </div>
+                                        ) : null}
+                                        {/* --------------------------------------------------- */}
+                                        
                                     </motion.div>
                                 )}
                             </AnimatePresence>
                         </div>
                     </div>
                     
-                    {/* Conditional rendering of RegisterForm (Posting Section) */}
-                    {/* แสดงฟอร์มโพสเมื่อเป็น Agent/Partner และถูกอนุมัติแล้วเท่านั้น */}
-                    {(user.role === 'Agent' || user.role === 'Partner') && user.isApproved === true && (
-                        <section id="register-section" ref={registerRef} className="py-20 bg-gray-50">
-                            <RegisterForm />
-                        </section>
-                    )}
+                    {/* Conditional rendering of RegisterForm (Posting Section) - ลบออกไปแล้ว */}
                     
                 </div>
             </main>
