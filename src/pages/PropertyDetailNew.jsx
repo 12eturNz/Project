@@ -3,12 +3,42 @@ import { useNavigate } from "react-router-dom";
 import { 
     AlertTriangle, Tag, Bed, Bath, MapPin, User, Phone, Mail, 
     Ruler, Layers, ShieldCheck, List, HardHat, Home,
-    Maximize2 // ใช้สำหรับพื้นที่
+    Maximize2, Edit3, X, Save 
 } from "lucide-react"; 
 import { motion } from "framer-motion";
 
+// --- 💡 Helper Functions for Numeric Formatting ---
+
+// Helper to clean input for storage (removes commas and non-digit/dot characters)
+const cleanNumber = (numStr) => {
+    if (numStr === null || numStr === undefined) return '';
+    return String(numStr).replace(/[^\d.]/g, '');
+};
+
+// Helper to format number for display (adds commas)
+const formatNumber = (numStr) => {
+    const cleaned = cleanNumber(numStr);
+    if (!cleaned) return '';
+    
+    // Check if it's a valid number before formatting
+    if (isNaN(Number(cleaned))) return cleaned;
+
+    const parts = cleaned.split('.');
+    const integerPart = parts[0];
+    const decimalPart = parts.length > 1 ? '.' + parts[1] : '';
+
+    // Add commas to the integer part
+    const formattedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    
+    return formattedInteger + decimalPart;
+};
+
+// --- End Helper Functions ---
+
+
 // Helper Component สำหรับกล่องข้อมูลสำคัญขนาดใหญ่ (InfoBlock)
 const InfoBlock = ({ title, value, unit, isPrice = false }) => (
+// ... (InfoBlock component code remains the same)
     <div className={`p-4 rounded-lg border border-gray-200 shadow-sm ${isPrice ? 'bg-orange-50' : 'bg-gray-50'}`}>
         <div className="text-sm text-gray-500 mb-1">{title}</div>
         <div className={`text-xl font-bold ${isPrice ? 'text-red-700' : 'text-gray-900'}`}>
@@ -21,9 +51,10 @@ const InfoBlock = ({ title, value, unit, isPrice = false }) => (
 // === Component: LoanCalculator (ระบบคำนวณสินเชื่อ) ===
 const LoanCalculator = ({ price }) => {
     // ดึงตัวเลขราคาขายจาก string (เช่น "฿25,900,000" -> 25900000)
-    const initialPrice = Number(price.replace(/[^0-9.]/g, ''));
+    // Note: ใช้ cleanNumber เพื่อให้แน่ใจว่าราคาที่ส่งมาคำนวณเป็นตัวเลขเท่านั้น
+    const initialPrice = Number(cleanNumber(price)); 
     
-    // สถานะเริ่มต้น: วงเงินกู้ 80%, อัตราดอกเบี้ย 7% ต่อปี, ระยะเวลา 30 ปี
+    // ... (LoanCalculator component code remains the same)
     const [loanAmount, setLoanAmount] = useState(initialPrice * 0.8); 
     const [rate, setRate] = useState(7.0); 
     const [years, setYears] = useState(30); 
@@ -35,12 +66,12 @@ const LoanCalculator = ({ price }) => {
 
     // ฟังก์ชันคำนวณผ่อนต่อเดือน
     const calculateMonthlyPayment = () => {
+        // ... (calculation logic remains the same)
         if (loanAmount <= 0 || rate <= 0 || years <= 0) return 0;
 
         const monthlyRate = (rate / 100) / 12; // อัตราดอกเบี้ยต่อเดือน
         const numPayments = years * 12; // จำนวนงวดทั้งหมด
 
-        // สูตรคำนวณผ่อนต่อเดือน (M = P [ i(1 + i)^n ] / [ (1 + i)^n – 1 ])
         const monthlyPayment = loanAmount * monthlyRate * Math.pow((1 + monthlyRate), numPayments) / (Math.pow((1 + monthlyRate), numPayments) - 1);
         
         return monthlyPayment;
@@ -60,12 +91,14 @@ const LoanCalculator = ({ price }) => {
                 {/* ราคาขาย */}
                 <div className="flex justify-between items-center pb-2 border-b border-gray-100">
                     <span className="text-gray-500">ราคาขาย</span>
-                    <span className="font-semibold text-gray-800">{price}</span>
+                    <span className="font-semibold text-gray-800">฿{formatNumber(initialPrice)}</span>
                 </div>
 
                 {/* วงเงินกู้ */}
                 <div>
                     <label className="block text-gray-700 mb-1">วงเงินกู้ (บาท)</label>
+                    {/* Note: Input for loan amount/rate/years can remain type="number" or type="text" 
+                       depending on desired UX. Keeping as type="number" for ease of use in this context. */}
                     <input 
                         type="number" 
                         value={Math.round(loanAmount)} 
@@ -75,8 +108,7 @@ const LoanCalculator = ({ price }) => {
                     />
                     <div className="text-xs text-gray-500 mt-1">เงินดาวน์: {new Intl.NumberFormat('th-TH').format(initialPrice - loanAmount)} ฿</div>
                 </div>
-
-                {/* อัตราดอกเบี้ย */}
+                {/* ... (Rate and Years inputs remain the same) */}
                 <div>
                     <label className="block text-gray-700 mb-1">อัตราดอกเบี้ย (% ต่อปี)</label>
                     <input 
@@ -89,7 +121,6 @@ const LoanCalculator = ({ price }) => {
                     />
                 </div>
 
-                {/* ระยะเวลาผ่อน */}
                 <div>
                     <label className="block text-gray-700 mb-1">ระยะเวลาผ่อน (ปี)</label>
                     <input 
@@ -124,11 +155,13 @@ const PropertyDetailNew = () => {
     const [property, setProperty] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    
+    const [isEditing, setIsEditing] = useState(false);
+    const [editableProperty, setEditableProperty] = useState(null);
+    const [userRole, setUserRole] = useState('Agent'); 
 
-    // จำลองข้อมูลเพิ่มเติมที่ไม่มาจาก RegisterForm.jsx
-    const dummyData = {
+    const initialDummyData = {
         project: "The Amber at Chatuchak",
-        projectLogo: "https://via.placeholder.com/100x100?text=Project+Logo",
         description: "บ้านเดี่ยวสร้างใหม่ ย่านจตุจักร ใกล้ MRT พหลโยธิน และ BTS หมอชิต เดินทางสะดวก โอบล้อม มหาวิทยาลัย, ห้างสรรพสินค้า พื้นที่ใช้สอย 375 ตร.ม. | 5 ห้องนอน | 6 ห้องน้ำ | ที่ดิน 31 ตร.ว.",
         features: [
             "การดีไซน์ทันสมัย (ใช้การดีไซน์แบบ Modern Contemporary พลังงานแสงอาทิตย์)",
@@ -136,7 +169,7 @@ const PropertyDetailNew = () => {
             "เดินทางได้สะดวกสบาย (ใกล้ทางด่วน)",
             "ระบบรักษาความปลอดภัย 24 ชั่วโมง",
             "วัสดุก่อสร้างคุณภาพดีเยี่ยม"
-        ]
+        ].join('\n') 
     };
 
     const loadPropertyDetails = () => {
@@ -145,6 +178,7 @@ const PropertyDetailNew = () => {
             const currentProperty = userListings[0]; 
 
             if (!currentProperty) {
+                // ... error handling
                 setError("ไม่พบรายการทรัพย์สินนี้ (อาจถูกลบไปแล้ว)");
                 setProperty(null);
                 setTimeout(() => {
@@ -154,7 +188,26 @@ const PropertyDetailNew = () => {
                  if (!currentProperty.price) {
                      currentProperty.price = "฿0";
                 }
-                setProperty(currentProperty);
+                
+                // 💡 ทำความสะอาดข้อมูลตัวเลขตั้งแต่โหลด เพื่อเตรียมพร้อมสำหรับการแก้ไข
+                const finalProperty = {
+                    ...currentProperty,
+                    project: currentProperty.project || initialDummyData.project,
+                    description: currentProperty.description || initialDummyData.description,
+                    features: currentProperty.features || initialDummyData.features,
+                    owner: currentProperty.owner || 'Agent Name',
+                    ownerPhone: currentProperty.ownerPhone || '090-XXX-XXXX',
+                    ownerEmail: currentProperty.ownerEmail || 'agent@example.com',
+                    // Clean numerical fields to ensure only digits are stored
+                    price: cleanNumber(currentProperty.price || '0'), // Store only number part of price
+                    land: cleanNumber(currentProperty.land || '0'),
+                    area: cleanNumber(currentProperty.area || '0'),
+                    beds: cleanNumber(currentProperty.beds || '0'),
+                    baths: cleanNumber(currentProperty.baths || '0'),
+                };
+
+                setProperty(finalProperty);
+                setEditableProperty({ ...finalProperty }); 
                 setError(null);
             }
         } catch (e) {
@@ -171,16 +224,104 @@ const PropertyDetailNew = () => {
             loadPropertyDetails(); 
         };
         window.addEventListener('listings-updated', handleListingUpdate);
+        
+        const storedRole = localStorage.getItem('userRole'); 
+        if (storedRole) {
+            setUserRole(storedRole);
+        }
+
         return () => {
             window.removeEventListener('listings-updated', handleListingUpdate);
         };
     }, []); 
+
+    // --- 💡 Handlers สำหรับการแก้ไขใหม่ ---
+    
+    // Handler สำหรับช่องข้อความทั่วไป
+    const handleTextChange = (e) => {
+        const { name, value } = e.target;
+        setEditableProperty(prev => ({
+            ...prev,
+            [name]: value,
+        }));
+    };
+    
+    // Handler สำหรับตัวเลขที่ต้องการ Comma Separator (Price, Land, Area)
+    const handleNumericChange = (e) => {
+        const { name, value } = e.target;
+        // 1. Clean the input value (remove commas) to get the true number for state storage
+        const cleanedValue = cleanNumber(value);
+
+        // 2. Update state with the clean value
+        setEditableProperty(prev => ({
+            ...prev,
+            [name]: cleanedValue,
+        }));
+    };
+    
+    // Handler สำหรับตัวเลขที่เป็นจำนวนเต็มขนาดเล็ก (Beds, Baths)
+    const handleIntegerChange = (e) => {
+        const { name, value } = e.target;
+        // Ensure it's a valid integer or empty
+        const integerValue = String(value).replace(/[^\d]/g, ''); 
+        
+        setEditableProperty(prev => ({
+            ...prev,
+            [name]: integerValue,
+        }));
+    };
+
+    // --- 💡 Handler Logic (Edit, Save, Cancel) Remains the Same ---
+    const handleEdit = () => {
+        setIsEditing(true);
+    };
+
+    const handleCancel = () => {
+        setIsEditing(false);
+        setEditableProperty(property); 
+    };
+    
+    const handleSave = () => {
+        try {
+            const userListings = JSON.parse(localStorage.getItem('userListings')) || [];
+            const index = userListings.findIndex((_, i) => i === 0); 
+            
+            if (index > -1) {
+                // Ensure numerical fields are saved as clean strings
+                const propertyToSave = {
+                    ...editableProperty,
+                    // Note: Price, Land, Area are already cleaned in handleNumericChange, but double check.
+                    price: cleanNumber(editableProperty.price || '0'), 
+                    land: cleanNumber(editableProperty.land || '0'),
+                    area: cleanNumber(editableProperty.area || '0'),
+                    beds: cleanNumber(editableProperty.beds || '0'),
+                    baths: cleanNumber(editableProperty.baths || '0'),
+                };
+
+                userListings[index] = propertyToSave;
+                localStorage.setItem('userListings', JSON.stringify(userListings));
+                
+                setProperty(propertyToSave);
+                setIsEditing(false);
+
+                alert('บันทึกข้อมูลทรัพย์สินเรียบร้อยแล้ว!');
+            } else {
+                alert('ไม่พบรายการทรัพย์สินที่จะบันทึก!');
+            }
+        } catch (e) {
+            console.error("Error saving property:", e);
+            alert('เกิดข้อผิดพลาดในการบันทึกข้อมูล');
+        }
+    };
+    // --- End Handler Logic ---
+
 
     if (loading) {
         return <div className="min-h-screen bg-gray-100 text-center py-20 text-gray-500">กำลังโหลดรายละเอียด...</div>;
     }
 
     if (error || !property) {
+        // ... (Error handling remains the same)
         return (
             <div className="min-h-screen bg-gray-100"> 
                 <motion.div 
@@ -197,13 +338,12 @@ const PropertyDetailNew = () => {
         );
     }
 
-    // --- แสดงรายละเอียดทรัพย์สิน ---
     const defaultImage = "https://via.placeholder.com/600x400?text=Image+Not+Available";
     const tags = ['Single Detached House', '5 reviews', '4 Q&A'];
-
-    // คำนวณราคาต่อ ตร.ม. สำหรับกล่องที่สาม (สมมติว่าราคาต่อ ตร.ม. คือ 507,842 ฿ ตามภาพ)
+    
     const pricePerSqm = '507,842'; 
     const pricePerSqmUnit = '฿/ตร.ม.';
+    const featuresList = (property.features || initialDummyData.features).split('\n');
 
 
     return (
@@ -214,18 +354,18 @@ const PropertyDetailNew = () => {
                 transition={{ duration: 0.5 }}
                 className="max-w-6xl mx-auto p-4 md:p-8 my-10 bg-white rounded-xl shadow-lg border border-gray-100" 
             >
-                {/* 1. ส่วนรูปภาพหลัก (ทำ Layout ให้เหมือนภาพเป๊ะๆ) */}
+                {/* 1. ส่วนรูปภาพหลัก (Remains the same) */}
                 <div className="grid grid-cols-4 grid-rows-2 gap-2 mb-8 h-[500px]">
-                    {/* รูปภาพใหญ่ (รูปแรก) - คลุมพื้นที่ 2x2 ฝั่งซ้าย */}
+                    {/* ... (Image grid code remains the same) */}
                     <div className="col-span-2 row-span-2 rounded-xl overflow-hidden shadow-md">
                         <img 
                             src={property.image} 
-                            alt={property.title} 
+                            alt={property.project} 
                             className="w-full h-full object-cover" 
                             onError={(e) => { e.target.onerror = null; e.target.src = defaultImage; }}
                         />
                     </div>
-                    {/* รูปภาพย่อย 4 รูป (จัดเรียง 2x2 ฝั่งขวา) */}
+                    {/* ... (Smaller images code remains the same) */}
                     <div className="col-span-1 row-span-1 rounded-xl overflow-hidden shadow-md">
                         <img src="https://via.placeholder.com/300x250?text=Interior+1" alt="Interior 1" className="w-full h-full object-cover" />
                     </div>
@@ -246,26 +386,96 @@ const PropertyDetailNew = () => {
                     {/* คอลัมน์ซ้าย (รายละเอียด) - 2/3 ส่วน */}
                     <div className="lg:col-span-2">
                         {/* Title & Price & Tags */}
-                        <div className="border-b pb-4 mb-4">
-                            <h2 className="text-3xl font-extrabold text-gray-900">
-                                {dummyData.project}
-                            </h2>
-                            
-                            <p className="text-3xl font-bold text-gray-900 mt-3 flex items-baseline gap-3">
-                                {property.price}
-                                {/* จำลอง % ลดราคา ตามภาพต้นฉบับ */}
-                                <span className="text-base font-normal text-red-600 ml-2">-11%</span> 
-                            </p>
-                            
-                            {/* Tags/Labels */}
-                            <div className="flex gap-2 mt-2">
-                                {/* Tag แรกเป็นสีเข้ม */}
-                                <span className="text-xs font-semibold px-3 py-1 rounded-full bg-green-700 text-white">{property.type}</span>
-                                {/* Tags อื่นๆ เป็นสีเทา */}
-                                {tags.map((tag, index) => (
-                                    <span key={index} className="text-xs font-semibold px-3 py-1 rounded-full bg-gray-200 text-gray-700">{tag}</span>
-                                ))}
+                        <div className="border-b pb-4 mb-4 flex justify-between items-start">
+                            <div>
+                                <h2 className="text-3xl font-extrabold text-gray-900">
+                                    {/* Project Name (Editable) */}
+                                    {isEditing ? (
+                                        <input 
+                                            type="text" 
+                                            name="project"
+                                            value={editableProperty?.project || ''} 
+                                            onChange={handleTextChange}
+                                            className="border-b border-gray-300 focus:border-[#bfa074] text-3xl font-extrabold text-gray-900 w-full"
+                                            placeholder="ชื่อโครงการ"
+                                        />
+                                    ) : (
+                                        property.project
+                                    )}
+                                </h2>
+                                
+                                <p className="text-3xl font-bold text-gray-900 mt-3 flex items-baseline gap-3">
+                                    {/* Price (Editable) 💡 ใช้ handleNumericChange และ formatNumber */}
+                                    {isEditing ? (
+                                        <div className="flex items-center">
+                                            <span className="mr-1">฿</span>
+                                            <input 
+                                                type="text" // Must be text to allow comma display
+                                                name="price"
+                                                // Display formatted number
+                                                value={formatNumber(editableProperty?.price || '')} 
+                                                onChange={handleNumericChange}
+                                                className="border-b border-gray-300 focus:border-[#bfa074] text-3xl font-bold text-gray-900 w-48"
+                                                placeholder="XX,XXX,XXX"
+                                            />
+                                        </div>
+                                    ) : (
+                                        `฿${formatNumber(property.price)}` // Display formatted
+                                    )}
+                                    <span className="text-base font-normal text-red-600 ml-2">-11%</span> 
+                                </p>
+                                
+                                {/* Tags/Labels */}
+                                <div className="flex gap-2 mt-2">
+                                    <span className="text-xs font-semibold px-3 py-1 rounded-full bg-green-700 text-white">
+                                        {/* Type (Editable) */}
+                                        {isEditing ? (
+                                            <input 
+                                                type="text" 
+                                                name="type"
+                                                value={editableProperty?.type || ''} 
+                                                onChange={handleTextChange}
+                                                className="bg-transparent text-white w-20 text-center"
+                                            />
+                                        ) : property.type}
+                                    </span>
+                                    {tags.map((tag, index) => (
+                                        <span key={index} className="text-xs font-semibold px-3 py-1 rounded-full bg-gray-200 text-gray-700">{tag}</span>
+                                    ))}
+                                </div>
                             </div>
+                            
+                            {/* 💡 ปุ่มแก้ไข/บันทึก/ยกเลิก (Remains the same) */}
+                            {userRole === 'Agent' && (
+                                <div className="flex gap-2 flex-shrink-0">
+                                    {!isEditing ? (
+                                        <button 
+                                            onClick={handleEdit} 
+                                            className="flex items-center gap-1 px-4 py-2 bg-[#bfa074] text-white text-sm font-medium rounded-lg hover:bg-[#a38c64] transition duration-200"
+                                        >
+                                            <Edit3 size={16} />
+                                            แก้ไข
+                                        </button>
+                                    ) : (
+                                        <>
+                                            <button 
+                                                onClick={handleSave} 
+                                                className="flex items-center gap-1 px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition duration-200"
+                                            >
+                                                <Save size={16} />
+                                                บันทึก
+                                            </button>
+                                            <button 
+                                                onClick={handleCancel} 
+                                                className="flex items-center gap-1 px-4 py-2 bg-gray-200 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-300 transition duration-200"
+                                            >
+                                                <X size={16} />
+                                                ยกเลิก
+                                            </button>
+                                        </>
+                                    )}
+                                </div>
+                            )}
                         </div>
 
                         {/* รายละเอียดทรัพย์ */}
@@ -273,14 +483,38 @@ const PropertyDetailNew = () => {
                             <h3 className="text-xl font-bold text-gray-800 mb-3 flex items-center gap-2 border-b pb-2">
                                 <List size={20} className="text-[#bfa074]" /> รายละเอียดทรัพย์
                             </h3>
-                            <p className="text-gray-700 mb-4 text-sm leading-relaxed">
-                                {dummyData.description}
-                            </p>
+                            {/* Description (Editable) */}
+                            {isEditing ? (
+                                <textarea
+                                    name="description"
+                                    value={editableProperty?.description || ''}
+                                    onChange={handleTextChange}
+                                    className="w-full p-3 border rounded-lg text-gray-700 text-sm leading-relaxed focus:border-[#bfa074]"
+                                    rows="4"
+                                    placeholder="ใส่รายละเอียดทรัพย์สิน"
+                                />
+                            ) : (
+                                <p className="text-gray-700 mb-4 text-sm leading-relaxed">
+                                    {property.description}
+                                </p>
+                            )}
                             
                             <h4 className="font-semibold text-gray-800 mt-4 mb-2">จุดเด่นโครงการ/ทรัพย์สิน</h4>
-                            <ul className="text-sm text-gray-700 list-disc list-inside space-y-1 ml-4">
-                                {dummyData.features.map((feature, index) => <li key={index}>{feature}</li>)}
-                            </ul>
+                            {/* Features (Editable as a multiline text) */}
+                            {isEditing ? (
+                                <textarea
+                                    name="features"
+                                    value={editableProperty?.features || ''}
+                                    onChange={handleTextChange}
+                                    className="w-full p-3 border rounded-lg text-gray-700 text-sm focus:border-[#bfa074]"
+                                    rows="5"
+                                    placeholder="ใส่จุดเด่นแต่ละข้อคั่นด้วย Enter"
+                                />
+                            ) : (
+                                <ul className="text-sm text-gray-700 list-disc list-inside space-y-1 ml-4">
+                                    {featuresList.filter(f => f.trim() !== '').map((feature, index) => <li key={index}>{feature}</li>)}
+                                </ul>
+                            )}
                         </div>
 
                         {/* กล่องข้อมูลสำคัญ (Key Stats) - เหมือนในภาพเป๊ะ */}
@@ -288,8 +522,35 @@ const PropertyDetailNew = () => {
                             <Ruler size={20} className="text-gray-500" /> พื้นที่
                         </h3>
                         <div className="grid grid-cols-3 gap-4 mb-8">
-                            <InfoBlock title="พื้นที่ดิน" value={property.land} unit="ตร.ว." />
-                            <InfoBlock title="พื้นที่ใช้สอย" value={property.area} unit="ตารางเมตร" />
+                            {/* พื้นที่ดิน (Editable) 💡 ใช้ handleNumericChange และ formatNumber */}
+                            <InfoBlock 
+                                title="พื้นที่ดิน" 
+                                value={isEditing ? (
+                                    <input 
+                                        type="text" // Must be text to allow comma display
+                                        name="land"
+                                        value={formatNumber(editableProperty?.land || '')} 
+                                        onChange={handleNumericChange}
+                                        className="border-b text-xl font-bold text-gray-900 w-full bg-transparent focus:border-[#bfa074]"
+                                    />
+                                ) : formatNumber(property.land)} 
+                                unit="ตร.ว." 
+                            />
+                            {/* พื้นที่ใช้สอย (Editable) 💡 ใช้ handleNumericChange และ formatNumber */}
+                            <InfoBlock 
+                                title="พื้นที่ใช้สอย" 
+                                value={isEditing ? (
+                                    <input 
+                                        type="text" // Must be text to allow comma display
+                                        name="area"
+                                        value={formatNumber(editableProperty?.area || '')} 
+                                        onChange={handleNumericChange}
+                                        className="border-b text-xl font-bold text-gray-900 w-full bg-transparent focus:border-[#bfa074]"
+                                    />
+                                ) : formatNumber(property.area)} 
+                                unit="ตารางเมตร" 
+                            />
+                            {/* ราคาต่อตารางเมตร (Derived Value) */}
                             <InfoBlock title="ราคาต่อตารางเมตร" value={pricePerSqm} unit={pricePerSqmUnit} isPrice={true} />
                         </div>
                         
@@ -298,34 +559,58 @@ const PropertyDetailNew = () => {
                             <Bed size={20} className="text-gray-500" /> ข้อมูลเบื้องต้น
                         </h3>
                         <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm text-gray-700 mb-8">
+                            {/* ห้องนอน (Editable) 💡 ใช้ handleIntegerChange */}
                             <div className="flex items-center gap-2">
-                                <Bed size={16} className="text-gray-500" /> ห้องนอน: <span className="font-semibold text-gray-900">{property.beds || '-'}</span>
+                                <Bed size={16} className="text-gray-500" /> ห้องนอน: 
+                                <span className="font-semibold text-gray-900">
+                                    {isEditing ? (
+                                        <input 
+                                            type="text" // Change to text for better mobile UX, and use handleIntegerChange
+                                            name="beds"
+                                            value={editableProperty?.beds || ''} 
+                                            onChange={handleIntegerChange}
+                                            className="border-b text-sm font-semibold text-gray-900 w-10 bg-transparent focus:border-[#bfa074]"
+                                        />
+                                    ) : property.beds || '-'}
+                                </span>
+                            </div>
+                            {/* ห้องน้ำ (Editable) 💡 ใช้ handleIntegerChange */}
+                            <div className="flex items-center gap-2">
+                                <Bath size={16} className="text-gray-500" /> ห้องน้ำ: 
+                                <span className="font-semibold text-gray-900">
+                                    {isEditing ? (
+                                        <input 
+                                            type="text" // Change to text and use handleIntegerChange
+                                            name="baths"
+                                            value={editableProperty?.baths || ''} 
+                                            onChange={handleIntegerChange}
+                                            className="border-b text-sm font-semibold text-gray-900 w-10 bg-transparent focus:border-[#bfa074]"
+                                        />
+                                    ) : property.baths || '-'}
+                                </span>
                             </div>
                             <div className="flex items-center gap-2">
-                                <Bath size={16} className="text-gray-500" /> ห้องน้ำ: <span className="font-semibold text-gray-900">{property.baths || '-'}</span>
+                                <Ruler size={16} className="text-gray-500" /> พื้นที่ใช้สอย: <span className="font-semibold text-gray-900">{formatNumber(property.area) || '-'} ตร.ม.</span>
                             </div>
                             <div className="flex items-center gap-2">
-                                <Ruler size={16} className="text-gray-500" /> พื้นที่ใช้สอย: <span className="font-semibold text-gray-900">{property.area || '-'} ตร.ม.</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <Layers size={16} className="text-gray-500" /> ขนาดที่ดิน: <span className="font-semibold text-gray-900">{property.land || '-'} วา</span>
+                                <Layers size={16} className="text-gray-500" /> ขนาดที่ดิน: <span className="font-semibold text-gray-900">{formatNumber(property.land) || '-'} วา</span>
                             </div>
                             <div className="flex items-center gap-2">
                                 <Tag size={16} className="text-gray-500" /> รหัสทรัพย์: <span className="font-semibold text-gray-900">A00355</span>
                             </div>
                         </div>
 
-                        {/* ข้อมูลโครงการ (ถูกจัดให้อยู่คอลัมน์ซ้ายตามภาพ) */}
+                        {/* ข้อมูลโครงการ (Remains the same) */}
                         <div className="p-6 bg-gray-50 rounded-xl border border-gray-200 shadow-sm">
                             <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2 border-b pb-2">
                                 <HardHat size={20} className="text-[#bfa074]" /> ข้อมูลโครงการ
                             </h3>
                             <div className="flex items-center gap-4 bg-white p-3 rounded-lg border border-gray-200">
-                                <img src={dummyData.projectLogo} alt="Project Thumb" className="w-16 h-16 object-cover rounded-md" />
+                                <img src={"https://via.placeholder.com/100x100?text=Project+Logo"} alt="Project Thumb" className="w-16 h-16 object-cover rounded-md" />
                                 <div>
                                     <div className="text-sm text-gray-500">โครงการ</div>
-                                    <div className="font-semibold text-gray-800">{dummyData.project}</div>
-                                </div>
+                                    <div className="font-semibold text-gray-800">{property.project}</div>
+                            </div>
                             </div>
                         </div>
 
@@ -334,43 +619,91 @@ const PropertyDetailNew = () => {
                     {/* คอลัมน์ขวา (ติดต่อ & สินเชื่อ) - 1/3 ส่วน */}
                     <div className="lg:col-span-1 space-y-6">
                         
-                        {/* กล่องติดต่อผู้โพสต์ (ลบ sticky top-8 ออกไป เพื่อแก้ปัญหาการบังเนื้อหา) */}
+                        {/* กล่องติดต่อผู้โพสต์ (Editable) 💡 ใช้ handleTextChange */}
                         <div className="p-6 bg-white rounded-xl border border-gray-200 shadow-lg">
                             <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2 border-b pb-2">
                                 <User size={20} className="text-[#bfa074]" /> ติดต่อผู้โพสต์
                             </h3>
-                            <p className="text-lg font-semibold text-gray-900 mb-4">{property.owner || 'ไม่ระบุ'}</p>
+                            {isEditing ? (
+                                <input 
+                                    type="text" 
+                                    name="owner"
+                                    value={editableProperty?.owner || ''} 
+                                    onChange={handleTextChange}
+                                    className="border-b border-gray-300 focus:border-[#bfa074] text-lg font-semibold text-gray-900 mb-4 w-full"
+                                    placeholder="ชื่อผู้โพสต์"
+                                />
+                            ) : (
+                                <p className="text-lg font-semibold text-gray-900 mb-4">{property.owner || 'ไม่ระบุ'}</p>
+                            )}
                             
                             <div className="space-y-3">
+                                {/* โทรศัพท์ (Editable) */}
                                 <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg border border-gray-200 shadow-sm">
                                     <Phone size={20} className="text-green-600 flex-shrink-0"/>
                                     <div>
                                         <div className="text-xs text-gray-500">โทรศัพท์</div>
-                                        <div className="font-medium text-gray-800">{property.ownerPhone || '-'}</div>
+                                        <div className="font-medium text-gray-800">
+                                            {isEditing ? (
+                                                <input 
+                                                    type="text" 
+                                                    name="ownerPhone"
+                                                    value={editableProperty?.ownerPhone || ''} 
+                                                    onChange={handleTextChange}
+                                                    className="bg-transparent font-medium text-gray-800 w-full border-b border-gray-300 focus:border-[#bfa074]"
+                                                    placeholder="เบอร์โทรศัพท์"
+                                                />
+                                            ) : property.ownerPhone || '-'}
+                                        </div>
                                     </div>
                                 </div>
+                                {/* อีเมล (Editable) */}
                                 <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg border border-gray-200 shadow-sm">
                                     <Mail size={20} className="text-blue-600 flex-shrink-0"/>
                                     <div>
                                         <div className="text-xs text-gray-500">อีเมล</div>
-                                        <div className="font-medium text-gray-800">{property.ownerEmail || '-'}</div>
+                                        <div className="font-medium text-gray-800">
+                                            {isEditing ? (
+                                                <input 
+                                                    type="email" 
+                                                    name="ownerEmail"
+                                                    value={editableProperty?.ownerEmail || ''} 
+                                                    onChange={handleTextChange}
+                                                    className="bg-transparent font-medium text-gray-800 w-full border-b border-gray-300 focus:border-[#bfa074]"
+                                                    placeholder="อีเมล"
+                                                />
+                                            ) : property.ownerEmail || '-'}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         
                         {/* === ระบบคำนวณสินเชื่อ Realtime === */}
-                        {property.price && <LoanCalculator price={property.price} />} 
+                        {/* Note: ส่งค่า price ที่เป็นตัวเลข clean แล้วไปคำนวณ */}
+                        {editableProperty?.price && <LoanCalculator price={editableProperty.price} />} 
                         {/* ============================================== */}
                     </div>
                 </div>
                 
-                {/* ข้อมูลสิ่งอำนวยความสะดวก (ย้ายมาไว้ข้างล่างสุดของคอลัมน์ซ้าย) */}
+                {/* ข้อมูลสิ่งอำนวยความสะดวก */}
                 <div className="mt-8 p-6 bg-gray-50 rounded-xl border border-gray-200 shadow-sm lg:col-span-2">
                     <h3 className="text-xl font-bold text-gray-800 mb-3 border-b pb-2 flex items-center gap-2">
                         <ShieldCheck size={20} className="text-[#bfa074]" /> สิ่งอำนวยความสะดวก
                     </h3>
-                    <p className="text-gray-700">{property.facilities || 'ไม่ระบุสิ่งอำนวยความสะดวก'}</p>
+                    {/* Facilities (Editable) 💡 ใช้ handleTextChange */}
+                    {isEditing ? (
+                        <textarea
+                            name="facilities"
+                            value={editableProperty?.facilities || ''}
+                            onChange={handleTextChange}
+                            className="w-full p-3 border rounded-lg text-gray-700 focus:border-[#bfa074]"
+                            rows="3"
+                            placeholder="ใส่สิ่งอำนวยความสะดวก"
+                        />
+                    ) : (
+                        <p className="text-gray-700">{property.facilities || 'ไม่ระบุสิ่งอำนวยความสะดวก'}</p>
+                    )}
                 </div>
             </motion.div>
         </div>

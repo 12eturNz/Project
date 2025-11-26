@@ -4,6 +4,34 @@ import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-r
 import PropertyCard from "./PropertyCard";
 
 
+// --- 💡 Helper Functions for Numeric Formatting ---
+
+// Helper to clean input (removes commas and non-digit/dot/currency characters)
+const cleanNumber = (numStr) => {
+    if (numStr === null || numStr === undefined || numStr === "") return '';
+    // ลบทุกอย่างยกเว้นตัวเลขและจุด
+    return String(numStr).replace(/[^0-9.]/g, ''); 
+};
+
+// Helper to format number for display (adds commas and optionally currency)
+const formatNumber = (numStr, includeCurrency = true) => {
+    const cleaned = cleanNumber(numStr);
+    if (!cleaned) return includeCurrency ? '' : ''; // แก้ไขให้เป็น string ว่าง ถ้าไม่มีข้อมูล
+    
+    // Check if it's a valid number before formatting
+    if (isNaN(Number(cleaned))) return cleaned;
+
+    const parts = cleaned.split('.');
+    const integerPart = parts[0];
+    const decimalPart = parts.length > 1 ? '.' + parts[1] : '';
+
+    // Add commas to the integer part
+    const formattedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    
+    return includeCurrency ? `฿${formattedInteger}${decimalPart}` : `${formattedInteger}${decimalPart}`;
+};
+
+// --- End Helper Functions ---
 
 
 // --- 1. ข้อมูลทรัพย์สินเริ่มต้น (staticProperties) ---
@@ -301,43 +329,55 @@ const staticProperties = [
 
 // PropertyGridWithPagination.jsx (ส่วนที่แก้ไข)
 
-// --- 2. ฟังก์ชันสำหรับรวมข้อมูลจาก Local Storage และจัดการรายการซ้ำ (ไม่เปลี่ยนแปลง) ---
+// --- 2. ฟังก์ชันสำหรับรวมข้อมูลจาก Local Storage และจัดการรายการซ้ำ (แก้ไขเพื่อให้ User Listings แสดงผลทั้งหมด) ---
 const getCombinedProperties = (originalList) => {
     let combinedProperties = [...originalList]; 
     
     try {
         const userListings = JSON.parse(localStorage.getItem('userListings')) || []; 
         
+        // 💡 แก้ไข: เพิ่ม ID ชั่วคราวให้ User Listings เพื่อหลีกเลี่ยงการถูก Deduplicate จากรูป Placeholder ที่เหมือนกัน
+        const formattedUserListings = userListings.map((listing, index) => ({
+            ...listing,
+            // เพิ่ม ID ชั่วคราวเพื่อให้แต่ละรายการที่โพสต์ใหม่มี Unique Key
+            id: listing.link || `user-temp-id-${index}-${Date.now()}`, 
+            // รายการที่มาจาก RegisterForm จะเป็นตัวเลขล้วน
+            // จัดรูปแบบราคา
+            price: formatNumber(listing.price), 
+            oldPrice: listing.oldPrice ? formatNumber(listing.oldPrice) : "",
+            // จัดรูปแบบพื้นที่โดยไม่ใส่สกุลเงิน
+            land: formatNumber(listing.land, false),
+            area: formatNumber(listing.area, false),
+        }));
+        
+        // สร้าง Set ของ Image URLS จากรายการ Static
         const staticImageUrls = new Set(originalList.map(p => p.image));
         
-        const uniqueUserListings = userListings.filter(listing => !staticImageUrls.has(listing.image));
+        // กรอง User Listings ที่มี Image URL ซ้ำกับ Static Listings ออก
+        const uniqueUserListings = formattedUserListings.filter(listing => 
+            !staticImageUrls.has(listing.image)
+        );
         
-        let tempList = [...uniqueUserListings, ...originalList]; 
-        
-        const seenImages = new Set();
-        const finalUniqueList = tempList.filter(p => {
-            if (p.image.includes("New+Listing+Pending+Review")) {
-                return true; 
-            }
-            
-            if (seenImages.has(p.image)) {
-                return false;
-            }
-            seenImages.add(p.image);
-            return true;
-        });
-
-        combinedProperties = finalUniqueList; 
+        // รวมรายการทั้งหมด: User Listings ขึ้นก่อน (เพื่อให้รายการใหม่แสดงบนสุด) ตามด้วย Static Listings
+        // เนื่องจาก User Listings แต่ละอันมี ID ชั่วคราวแล้ว จึงไม่จำเป็นต้องใช้ seenImages ในการกรองซ้ำอีก
+        combinedProperties = [...uniqueUserListings, ...originalList]; 
         
     } catch (error) {
         console.error("Error loading user listings from Local Storage:", error);
+        // ในกรณีที่เกิด Error ให้ใช้แต่รายการ Static เดิม
+        combinedProperties = originalList;
     }
     
     return combinedProperties;
 };
 
 
-// 💡 ลบ const allProperties = getCombinedProperties(staticProperties); ออก
+// 💡 เพิ่มฟังก์ชัน parsePrice และใช้ cleanNumber ในนั้น
+// ฟังก์ชันช่วยแปลงราคาจาก "฿12,500,000" ให้เป็นตัวเลขสำหรับใช้ในการ Filter
+const parsePrice = (priceStr) => {
+  if (!priceStr) return NaN; 
+  return parseInt(cleanNumber(priceStr), 10);
+};
 
 
 // CRITICAL FIX รับ currentFilters เป็น Prop 
@@ -352,7 +392,8 @@ const PropertyGridWithPagination = ({ currentFilters }) => {
     useEffect(() => {
         // ฟังก์ชันโหลดข้อมูลและอัปเดต State
         const updateProperties = () => {
-            setAllProperties(getCombinedProperties(staticProperties));
+            const combinedList = getCombinedProperties(staticProperties);
+            setAllProperties(combinedList);
             // เมื่อข้อมูลเปลี่ยน ให้กลับไปหน้าแรกเพื่อป้องกันหน้าว่าง
             setCurrentPage(1); 
         };
@@ -360,7 +401,7 @@ const PropertyGridWithPagination = ({ currentFilters }) => {
         // 1. โหลดข้อมูลเมื่อ Component Mount ครั้งแรก
         updateProperties(); 
         
-        // 2. Add listener: รับฟังการเปลี่ยนแปลงจาก Profile.jsx
+        // 2. Add listener: รับฟังการเปลี่ยนแปลงจาก Profile.jsx หรือ RegisterForm.jsx
         window.addEventListener('listings-updated', updateProperties);
 
         // 3. Cleanup: ล้าง Listener เมื่อ Component ถูกถอดออก
@@ -368,12 +409,6 @@ const PropertyGridWithPagination = ({ currentFilters }) => {
             window.removeEventListener('listings-updated', updateProperties);
         };
     }, []); // 💡 Empty dependency array: run once on mount
-
-  // ฟังก์ชันช่วยแปลงราคาจาก "฿12,500,000" ให้เป็นตัวเลข
-  const parsePrice = (priceStr) => {
-    if (!priceStr) return NaN; 
-    return parseInt(priceStr.replace(/[^0-9]/g, ""), 10);
-  };
 
   // ฟังก์ชันหลักสำหรับกรองทรัพย์ ใช้ allProperties จาก State
   const filteredProperties = allProperties.filter((property) => {
@@ -388,7 +423,7 @@ const PropertyGridWithPagination = ({ currentFilters }) => {
 
     //  Price Range
     if (filters && (filters.price.min || filters.price.max)) {
-      const price = parsePrice(property.price);
+      const price = parsePrice(property.price); // ใช้ parsePrice เพื่อดึงตัวเลขล้วนสำหรับเปรียบเทียบ
       if (isNaN(price)) return false; 
       
       const min = filters.price.min ? parseInt(filters.price.min, 10) : null;
@@ -403,8 +438,8 @@ const PropertyGridWithPagination = ({ currentFilters }) => {
       const beds = String(property.beds);
       const filterBeds = filters.bedroom;
       if (filterBeds === "5+") {
-        if (parseInt(beds, 10) < 5) return false;
-      } else if (beds !== filterBeds) {
+        if (parseInt(cleanNumber(beds), 10) < 5) return false;
+      } else if (cleanNumber(beds) !== filterBeds) {
         return false;
       }
     }
@@ -414,8 +449,8 @@ const PropertyGridWithPagination = ({ currentFilters }) => {
       const baths = String(property.baths);
       const filterBaths = filters.bathroom;
       if (filterBaths === "5+") {
-        if (parseInt(baths, 10) < 5) return false;
-      } else if (baths !== filterBaths) {
+        if (parseInt(cleanNumber(baths), 10) < 5) return false;
+      } else if (cleanNumber(baths) !== filterBaths) {
         return false;
       }
     }
@@ -428,8 +463,8 @@ const PropertyGridWithPagination = ({ currentFilters }) => {
     //  Area พื้นที่ดิน/ใช้สอย
     if (filters && filters.area) {
         const areaFilters = filters.area;
-        const land = property.land ? parseFloat(property.land) : 0;
-        const area = property.area ? parseFloat(property.area) : 0;
+        const land = property.land ? parseFloat(cleanNumber(property.land)) : 0; // ใช้ cleanNumber ก่อนแปลง
+        const area = property.area ? parseFloat(cleanNumber(property.area)) : 0; // ใช้ cleanNumber ก่อนแปลง
 
         // พื้นที่ดิน ตร.วา
         if (areaFilters.minLand) {
@@ -531,7 +566,7 @@ const PropertyGridWithPagination = ({ currentFilters }) => {
                     className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
                 >
                     {currentProperties.map((property, index) => (
-                    <PropertyCard key={index} {...property} />
+                    <PropertyCard key={property.id || index} {...property} />
                     ))}
                 </motion.div>
                 </AnimatePresence>

@@ -21,6 +21,27 @@ let DefaultIcon = L.icon({
 });
 L.Marker.prototype.options.icon = DefaultIcon;
 
+// --- NEW UTILITY FUNCTIONS FOR NUMBER FORMATTING ---
+const formatNumberWithCommas = (num) => {
+  if (num === '' || num === null || num === undefined) return '';
+  const str = String(num);
+  // Remove non-digit characters except for a single dot (for decimals)
+  const numericValue = str.replace(/[^\d.]/g, '');
+  if (!numericValue) return '';
+
+  const parts = numericValue.split('.');
+  const integerPart = parts[0];
+  const decimalPart = parts.length > 1 ? '.' + parts[1] : '';
+
+  // Format the integer part with commas (thousand separators)
+  const formattedIntegerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+  return formattedIntegerPart + decimalPart;
+};
+
+const stripCommas = (str) => String(str).replace(/,/g, '');
+// --- END NEW UTILITY FUNCTIONS ---
+
 const MapClickHandler = ({ onLocationSelect }) => {
   useMapEvents({
     click(e) {
@@ -176,6 +197,16 @@ const RegisterForm = () => {
 
   const handleLocationSelect = (latlng) => setForm(prev => ({ ...prev, mapLocation: latlng }));
 
+  // --- NEW HANDLER FOR PRICE ---
+  const handlePriceChange = (e) => {
+    const { value } = e.target;
+    // Strip commas for internal state storage
+    const rawValue = stripCommas(value);
+    setForm(prev => ({ ...prev, sellingPrice: rawValue }));
+    if (errors.sellingPrice) setErrors(prev => ({ ...prev, sellingPrice: null }));
+  };
+  // --- END NEW HANDLER ---
+
   const validateStep = (s) => {
     let e = {};
     let ok = true;
@@ -276,7 +307,20 @@ const RegisterForm = () => {
             </div>
 
             <FormSelect label="ประเภททรัพย์สิน" id="propertyType" value={form.propertyType} onChange={handleChange} options={propertyTypeOptions} placeholder="เลือกประเภททรัพย์สิน" required icon={Home} error={errors.propertyType} />
-            <FormInput label="ราคาขาย (บาท)" id="sellingPrice" type="number" value={form.sellingPrice} onChange={handleChange} placeholder="เช่น 5000000" required icon={Tag} error={errors.sellingPrice} />
+            
+            {/* --- MODIFIED sellingPrice FormInput --- */}
+            <FormInput 
+                label="ราคาขาย (บาท)" 
+                id="sellingPrice" 
+                type="text" // Changed to text to display formatted value
+                value={formatNumberWithCommas(form.sellingPrice)} // Apply formatting
+                onChange={handlePriceChange} // Use new handler
+                placeholder="เช่น 5,000,000" // Added comma to placeholder
+                required 
+                icon={Tag} 
+                error={errors.sellingPrice} 
+            />
+            {/* --- END MODIFIED sellingPrice FormInput --- */}
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormInput label="จำนวนห้องนอน" id="bedrooms" type="number" value={form.bedrooms} onChange={handleChange} icon={Bed} />
