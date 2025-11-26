@@ -102,6 +102,7 @@ const FormSelect = ({ label, id, value, onChange, options, placeholder, required
   </div>
 );
 
+
 // --- Static Data ---
 const propertyTypeOptions = [
   { value: 'Single House', label: 'บ้านเดี่ยว' },
