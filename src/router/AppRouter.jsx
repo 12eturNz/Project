@@ -34,6 +34,7 @@ const PropertyDetail17 = lazy(() => import("../pages/PropertyDetail/PropertyDeta
 const PropertyDetail18 = lazy(() => import("../pages/PropertyDetail/PropertyDetail18"));
 
 const LoginRegister = lazy(() => import("../pages/LoginRegister"));
+const AdminDashboard = lazy(() => import("../pages/AdminDashboard"));
 export default function AppRouter() {
   return (
     <Suspense fallback={<div className="text-center mt-10">กำลังโหลด...</div>}>
@@ -70,6 +71,7 @@ export default function AppRouter() {
         <Route path="/PropertyDetail17" element={<PropertyDetail17/>} />
         <Route path="/PropertyDetail18" element={<PropertyDetail18/>} />
          <Route path="/LoginRegister" element={<LoginRegister/>} />
+          <Route path="/AdminDashboard" element={<AdminDashboard/>} />
       </Routes>
     </Suspense>
   );

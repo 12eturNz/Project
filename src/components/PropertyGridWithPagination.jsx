@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react";
 import PropertyCard from "./PropertyCard";
+
 
 const allProperties = [
   {
@@ -295,13 +296,112 @@ const allProperties = [
  
 ];
 
-const PropertyGridWithPagination = () => {
+
+//  CRITICAL FIX รับ currentFilters เป็น Prop 
+
+const PropertyGridWithPagination = ({ currentFilters }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const propertiesPerPage = 9;
-  const totalPages = Math.ceil(allProperties.length / propertiesPerPage);
+
+  // ฟังก์ชันช่วยแปลงราคาจาก "฿12,500,000" ให้เป็นตัวเลข
+  const parsePrice = (priceStr) => {
+    if (!priceStr) return NaN; 
+    return parseInt(priceStr.replace(/[^0-9]/g, ""), 10);
+  };
+
+  // ฟังก์ชันหลักสำหรับกรองทรัพย์
+  const filteredProperties = allProperties.filter((property) => {
+    const filters = currentFilters;
+
+    //  Search Term (ชื่อ / ที่ตั้ง / ทำเล / โครงการ)
+    if (filters && filters.searchTerm) {
+      const searchTermLower = filters.searchTerm.toLowerCase();
+      const fieldsToSearch = [property.title, property.location].join(" ").toLowerCase();
+      if (!fieldsToSearch.includes(searchTermLower)) return false;
+    }
+
+    //  Price Range
+    if (filters && (filters.price.min || filters.price.max)) {
+      const price = parsePrice(property.price);
+      if (isNaN(price)) return false; 
+      
+      const min = filters.price.min ? parseInt(filters.price.min, 10) : null;
+      const max = filters.price.max ? parseInt(filters.price.max, 10) : null;
+
+      if (min !== null && price < min) return false;
+      if (max !== null && price > max) return false;
+    }
+
+    //  Bedroom
+    if (filters && filters.bedroom) {
+      const beds = String(property.beds);
+      const filterBeds = filters.bedroom;
+      if (filterBeds === "5+") {
+        if (parseInt(beds, 10) < 5) return false;
+      } else if (beds !== filterBeds) {
+        return false;
+      }
+    }
+
+    //  Bathroom
+    if (filters && filters.bathroom) {
+      const baths = String(property.baths);
+      const filterBaths = filters.bathroom;
+      if (filterBaths === "5+") {
+        if (parseInt(baths, 10) < 5) return false;
+      } else if (baths !== filterBaths) {
+        return false;
+      }
+    }
+
+    //  Property Type
+    if (filters && filters.type.length > 0) {
+      if (!filters.type.includes(property.type)) return false;
+    }
+
+    //  Area พื้นที่ดิน/ใช้สอย
+    if (filters && filters.area) {
+        const areaFilters = filters.area;
+        const land = property.land ? parseFloat(property.land) : 0;
+        const area = property.area ? parseFloat(property.area) : 0;
+
+        // พื้นที่ดิน ตร.วา
+        if (areaFilters.minLand) {
+          if (land < parseFloat(areaFilters.minLand)) return false;
+        }
+        if (areaFilters.maxLand) {
+          if (land > parseFloat(areaFilters.maxLand)) return false;
+        }
+
+        // พื้นที่ใช้สอย ตร.เมตร
+        if (areaFilters.minArea) {
+          if (area < parseFloat(areaFilters.minArea)) return false;
+        }
+        if (areaFilters.maxArea) {
+          if (area > parseFloat(areaFilters.maxArea)) return false;
+        }
+    }
+
+
+    //  Series Tag
+    if (filters && filters.series.length > 0) {
+      if (property.tag && !filters.series.includes(property.tag)) return false;
+    }
+
+    return true; // ถ้าผ่านทุกเงื่อนไข
+  });
+
+
+  const totalPages = Math.ceil(filteredProperties.length / propertiesPerPage);
+
+  // เมื่อ Filters เปลี่ยน ให้กลับไปหน้าแรก
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [currentFilters]);
 
   const startIndex = (currentPage - 1) * propertiesPerPage;
-  const currentProperties = allProperties.slice(startIndex, startIndex + propertiesPerPage);
+  // ใช้ filteredProperties ในการแบ่งหน้า
+  const currentProperties = filteredProperties.slice(startIndex, startIndex + propertiesPerPage);
 
   const handlePageChange = (page) => {
     if (page < 1 || page > totalPages) return;
@@ -347,64 +447,72 @@ const PropertyGridWithPagination = () => {
 
   return (
     <div className="flex flex-col items-center">
-      {/*  ส่วนกริด */}
-      <div className="relative w-full min-h-[600px]">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currentPage}
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -30 }}
-            transition={{ duration: 0.4 }}
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
-          >
-            {currentProperties.map((property, index) => (
-              <PropertyCard key={index} {...property} />
-            ))}
-          </motion.div>
-        </AnimatePresence>
-      </div>
+        {filteredProperties.length === 0 ? (
+            <div className="text-center py-10">
+                <p className="text-xl text-gray-500">ไม่พบทรัพย์ที่ตรงกับเงื่อนไขการค้นหาของคุณ</p>
+            </div>
+        ) : (
+            <>
+            {/* ส่วนกริด */}
+            <div className="relative w-full min-h-[600px]">
+                <AnimatePresence mode="wait">
+                <motion.div
+                    key={currentPage}
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -30 }}
+                    transition={{ duration: 0.4 }}
+                    className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+                >
+                    {currentProperties.map((property, index) => (
+                    <PropertyCard key={index} {...property} />
+                    ))}
+                </motion.div>
+                </AnimatePresence>
+            </div>
 
-      {/*  Pagination */}
-      <div className="flex items-center justify-center gap-2 mt-10 text-sm select-none">
-        {/* ไปหน้าแรก */}
-        <button
-          onClick={() => handlePageChange(1)}
-          disabled={currentPage === 1}
-          className="p-2 text-gray-400 hover:text-[#bfa074] cursor-pointer transition-all duration-200 disabled:opacity-30"
-        >
-          <ChevronsLeft size={18} />
-        </button>
+            {/* Pagination */}
+            <div className="flex items-center justify-center gap-2 mt-10 text-sm select-none">
+                {/* ไปหน้าแรก */}
+                <button
+                onClick={() => handlePageChange(1)}
+                disabled={currentPage === 1}
+                className="p-2 text-gray-400 hover:text-[#bfa074] cursor-pointer transition-all duration-200 disabled:opacity-30"
+                >
+                <ChevronsLeft size={18} />
+                </button>
 
-        {/* ย้อนกลับ */}
-        <button
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-          className="p-2 text-gray-400 hover:text-[#bfa074] cursor-pointer transition-all duration-200 disabled:opacity-30"
-        >
-          <ChevronLeft size={18} />
-        </button>
+                {/* ย้อนกลับ */}
+                <button
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+                className="p-2 text-gray-400 hover:text-[#bfa074] cursor-pointer transition-all duration-200 disabled:opacity-30"
+                >
+                <ChevronLeft size={18} />
+                </button>
 
-        {renderPageNumbers()}
+                {renderPageNumbers()}
 
-        {/* ไปต่อ */}
-        <button
-          onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage === totalPages}
-          className="p-2 text-gray-400 hover:text-[#bfa074] cursor-pointer transition-all duration-200 disabled:opacity-30"
-        >
-          <ChevronRight size={18} />
-        </button>
+                {/* ไปต่อ */}
+                <button
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPages}
+                className="p-2 text-gray-400 hover:text-[#bfa074] cursor-pointer transition-all duration-200 disabled:opacity-30"
+                >
+                <ChevronRight size={18} />
+                </button>
 
-        {/* ไปหน้าสุดท้าย */}
-        <button
-          onClick={() => handlePageChange(totalPages)}
-          disabled={currentPage === totalPages}
-          className="p-2 text-gray-400 hover:text-[#bfa074] cursor-pointer transition-all duration-200 disabled:opacity-30"
-        >
-          <ChevronsRight size={18} />
-        </button>
-      </div>
+                {/* ไปหน้าสุดท้าย */}
+                <button
+                onClick={() => handlePageChange(totalPages)}
+                disabled={currentPage === totalPages}
+                className="p-2 text-gray-400 hover:text-[#bfa074] cursor-pointer transition-all duration-200 disabled:opacity-30"
+                >
+                <ChevronsRight size={18} />
+                </button>
+            </div>
+            </>
+        )}
     </div>
   );
 };
