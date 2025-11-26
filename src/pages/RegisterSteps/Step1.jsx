@@ -13,16 +13,17 @@ export default function Step1({ next, updateForm, data }) {
         onChange={(e) => updateForm({ lastName: e.target.value })}
         className="w-full p-3 border rounded-lg cursor-text"
       />
-      <input
-        placeholder="เลขบัตรประชาชน"
-        defaultValue={data.citizenId}
-        onChange={(e) => updateForm({ citizenId: e.target.value })}
-        className="w-full p-3 border rounded-lg cursor-text"
-      />
+     
       <input
         placeholder="เบอร์มือถือ"
         defaultValue={data.phone}
         onChange={(e) => updateForm({ phone: e.target.value })}
+        className="w-full p-3 border rounded-lg cursor-text"
+      />
+      <input
+        placeholder="ID Line"
+        defaultValue={data.ID}
+        onChange={(e) => updateForm({ ID: e.target.value })}
         className="w-full p-3 border rounded-lg cursor-text"
       />
 

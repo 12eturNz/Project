@@ -2,7 +2,7 @@ import React, { useState, useEffect, memo, useRef } from "react";
 import { motion } from "framer-motion";
 import Navbar from "../components/Navbartop";
 import Footer from "../components/Footer";
-import RegisterFormPartner from "../components/RegisterFormPartner";
+
 import ReviewCarousel from "../components/ReviewCarousel";
 import img2 from "../assets/house2.jpg";
 import { useTranslation } from "react-i18next";
@@ -109,7 +109,8 @@ const Partner = memo(() => {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 viewport={{ once: true }}
-                className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 transform hover:scale-105 transition-transform duration-300"
+                // จุดแก้ที่ 1: เติม cursor-pointer ตรงนี้ (สำหรับ 6 การ์ดแรก)
+                className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 transform hover:scale-105 transition-transform duration-300 cursor-pointer"
               >
                 <div className="flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 mb-4">
                   <item.icon className={item.color} size={32} strokeWidth={2} />
@@ -143,7 +144,8 @@ const Partner = memo(() => {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 viewport={{ once: true }}
-                className="flex flex-col items-center bg-white p-8 rounded-lg shadow-lg transform hover:scale-105 transition-transform duration-300"
+                // จุดแก้ที่ 2: เติม cursor-pointer ตรงนี้ (สำหรับ 3 การ์ดล่าง)
+                className="flex flex-col items-center bg-white p-8 rounded-lg shadow-lg transform hover:scale-105 transition-transform duration-300 cursor-pointer"
               >
                 <div className={`flex items-center justify-center p-4 rounded-full ${model.color} mb-4`}>
                   <model.icon size={32} />
@@ -201,7 +203,7 @@ const Partner = memo(() => {
         </div>
       </section>
 
-     
+    
 
       <Footer />
     </div>

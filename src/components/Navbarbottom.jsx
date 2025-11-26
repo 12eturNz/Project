@@ -1,10 +1,12 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 
 const Navbarbottom = () => {
   const location = useLocation();
   const navigate = useNavigate();
-
+  const { t } = useTranslation();
   // เลื่อนไปยัง section ต่าง ๆ ในหน้า Sell
   const handleScrollToSection = (sectionId) => {
     if (location.pathname !== "/Project/Sell") {
@@ -53,36 +55,38 @@ const Navbarbottom = () => {
           onClick={handleGoToTop}
           className="hover:text-yellow-400 transition-colors duration-200 cursor-pointer bg-transparent border-none"
         >
-          ผู้ขาย
+          {t("Navbarbottom.T1")}
         </button>
 
         <button
           onClick={() => handleScrollToSection("steps")}
           className="hover:text-yellow-400 transition-colors duration-200 cursor-pointer bg-transparent border-none"
         >
-          ขั้นตอนการขายบ้าน
+           {t("Navbarbottom.T2")}
         </button>
 
         <button
           onClick={() => handleScrollToSection("why-homerun")}
           className="hover:text-yellow-400 transition-colors duration-200 cursor-pointer bg-transparent border-none"
         >
-          ทำไมต้อง Premium
+           {t("Navbarbottom.T3")}
         </button>
-
+         
         <button
           onClick={() => handleScrollToSection("faq")}
           className="hover:text-yellow-400 transition-colors duration-200 cursor-pointer bg-transparent border-none"
         >
-          คำถามที่พบบ่อย
+           {t("Navbarbottom.T4")}
         </button>
 
-        <button
-          onClick={handleGoToRegister}
-          className="bg-sky-600 hover:bg-sky-700 text-white px-5 py-2 rounded-full shadow transition-colors duration-200 cursor-pointer"
-        >
-          เสนอขายบ้าน
-        </button>
+       <Link to="/Project/Profile">
+  <button
+    onClick={() => handleScrollToSection("faq")}
+    className="bg-sky-600 hover:bg-sky-700 text-white px-5 py-2 rounded-full shadow transition-colors duration-200 cursor-pointer"
+  >
+    {t("Navbarbottom.T5")}
+  </button>
+</Link>
       </div>
     </nav>
   );

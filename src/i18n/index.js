@@ -1,5 +1,6 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
+import Navbarbottom from "../components/Navbarbottom";
 
 
 i18n.use(initReactI18next).init({
@@ -42,6 +43,7 @@ i18n.use(initReactI18next).init({
         },
 
          WhyHomerun:{
+          
           Header:"ทำไมต้อง Premium Asset",
            Header1:"ขาย",
             Header2:"ซื้อ",
@@ -160,9 +162,12 @@ i18n.use(initReactI18next).init({
                       Sell:{
                         H:"ขายบ้านกับ",
                         H1:"Premium Asset",
+                        HH:"Premium Asset",
+                        HHH:"มี",
+                        
                            H2:"ประเภททรัพย์ที่",
-                           H3:"Premium",
-                           H4:"นำมารีโนเวท",
+                           H3:"ฝากขายผ่าน Agent",
+                           H4:"กับทาง Premium",
                            H5:" 5 ขั้นตอน",
                            H6:"เสนอทรัพย์",
                            H7:"กับ Premium Asset",
@@ -336,7 +341,15 @@ i18n.use(initReactI18next).init({
 
 
 
-                                                    }   
+                                                    },
+                                                    Navbarbottom:{
+                                                      T1:"ผู้ขาย",
+                                                      T2:"ขั้นตอนการขายบ้าน",
+                                                      T3:"ทำไมต้อง Premium",
+                                                      T4:"คำถามที่พบบ่อย",
+                                                      T5:"เสนอขายบ้าน",
+                                                    }
+
                                           
                                           
 
@@ -507,9 +520,13 @@ i18n.use(initReactI18next).init({
         Sell:{
                        H:"Sell ​​with",
                         H1:"Premium Asset",
+
+                         HH:"Premium Asset",
+                        HHH:"Have",
+
                         H2:"Types of assets",
-                         H3:"Premium",
-                          H4:"Renovated",
+                         H3:"Consignment through an agent",
+                          H4:"With Premium",
                           H5:"5 steps",
                            H6:"Offer assets",
                            H7:"With Premium Asset",
@@ -685,7 +702,15 @@ i18n.use(initReactI18next).init({
                                                              H9:"Become a partner",
                                               
                                           
+                                                    },
+                                                      Navbarbottom:{
+                                                      T1:"Seller",
+                                                      T2:"Home selling process",
+                                                      T3:"Why Premium",
+                                                      T4:"Frequently asked questions",
+                                                      T5:"House for sale",
                                                     }
+
                                           
 
 

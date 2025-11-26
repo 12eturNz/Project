@@ -12,7 +12,7 @@ const slideUp = {
 
 const About = memo(() => {
   const [showFixedNavbar, setShowFixedNavbar] = useState(false);
-    const { t } = useTranslation();
+  const { t } = useTranslation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -35,7 +35,7 @@ const About = memo(() => {
 
       <section className="relative w-full h-[60vh] sm:h-[70vh] flex items-center justify-center overflow-hidden bg-black">
         <img
-          src="https://img.homerunproptech.com/seller/dropform/seller_dropform_img_0_08_Dec_2022_1670470720630.jpg" //
+          src="https://img.homerunproptech.com/seller/dropform/seller_dropform_img_0_08_Dec_2022_1670470720630.jpg" 
           alt="เกี่ยวกับเรา"
           className="absolute inset-0 w-full h-full object-cover"
         />
@@ -55,7 +55,7 @@ const About = memo(() => {
           
           <div className="relative w-full h-[300px] sm:h-[400px] md:h-[500px] rounded-2xl overflow-hidden">
             <img
-              src="https://img.homerunproptech.com/seller/dropform/seller_dropform_img_0_08_Dec_2022_1670470720630.jpg" //
+              src="https://img.homerunproptech.com/seller/dropform/seller_dropform_img_0_08_Dec_2022_1670470720630.jpg" 
               alt="Modern House"
               className="w-full h-full object-cover"
             />
@@ -89,28 +89,34 @@ const About = memo(() => {
         </div>
       </section>
 
+      {/* --- ส่วนที่แก้ไขข้อมูลบริษัท --- */}
       <section className="w-full py-16 bg-gray-50">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <h2 className="text-3xl font-bold text-gray-900 mb-8">{t("About.T1")}</h2>
           <div className="bg-white p-8 rounded-lg shadow-md border border-gray-200">
+            {/* 1. ชื่อบริษัท */}
             <p className="text-lg font-semibold text-gray-800 mb-4">
-             {t("About.T2")}
+              บริษัท Premium Asset จำกัด
             </p>
+
+            {/* 2. ที่อยู่ */}
             <p className="text-base text-gray-700 mb-6 max-w-2xl mx-auto leading-relaxed">
-              <span className="font-semibold">{t("About.T3")}</span> {t("About.T4")}
+              <span className="font-semibold">ที่อยู่:</span> 100/50 อาคารศรีปทุม ชั้น 8 ซ.บางบัว 16 (สามเเสน) ถ.บางเขน แขวงคลองหลวง เขตคลองหลวง กรุงเทพมหานคร 10111
             </p>
+
+            {/* 3. ช่องทางการติดต่อ */}
             <div className="flex flex-wrap items-center justify-center gap-6 text-base text-gray-700">
                 <div className="flex items-center gap-2">
-                  <span className="font-semibold">{t("About.T5")}</span>
-                  <span>{t("About.T6")}</span>
+                  <span className="font-semibold">เบอร์โทรศัพท์:</span>
+                  <span>09-1123456 ต่อ 888</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="font-semibold">{t("About.T7")}</span>
-                  <span>{t("About.T8")}</span>
+                  <span className="font-semibold">เบอร์โทรศัพท์ (Sales):</span>
+                  <span>000-1111111</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="font-semibold">{t("About.T9")}</span>
-                  <span>{t("About.T10")}</span>
+                  <span className="font-semibold">อีเมล:</span>
+                  <span>Premium@gmail.com</span>
                 </div>
             </div>
           </div>

@@ -13,9 +13,38 @@ const slideUp = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } },
 };
 
+const defaultFilters = {
+  searchTerm: "",
+  price: { min: "", max: "" },
+  bedroom: "",
+  bathroom: "",
+  type: [],
+  area: { minLand: "", maxLand: "", minArea: "", maxArea: "" },
+  series: [],
+};
+
+
 const Home = memo(() => {
   const [showFixedNavbar, setShowFixedNavbar] = useState(false);
-   const { t } = useTranslation();
+  const { t } = useTranslation();
+
+ 
+  //  ย้าย State การกรองขึ้นมาที่นี่เพื่อส่งไปให้ PropertyGrid 
+ 
+  const [currentFilters, setCurrentFilters] = useState(defaultFilters);
+  const [filters, setFilters] = useState(defaultFilters); // State สำหรับ SearchBar ภายใน
+
+  // Handler สำหรับปุ่ม "ค้นหา" หลัก
+  const handleSearch = () => {
+    setCurrentFilters(filters);
+  };
+  
+  // Handler สำหรับปุ่ม "ล้างค่า" ทั้งหมด
+  const handleClearAll = () => {
+    // ตั้งค่า state filters (สำหรับแสดงผลใน Dropdown) และ currentFilters (สำหรับกรอง)
+    setFilters(defaultFilters);
+    setCurrentFilters(defaultFilters);
+  };
 
 
   useEffect(() => {
@@ -38,7 +67,7 @@ const Home = memo(() => {
         <Navbar />
       </motion.div>
 
-      {/*  Hero Section */}
+      {/* Hero Section */}
       <section className="relative w-full h-[60vh] xs:h-[65vh] sm:h-[70vh] md:h-[80vh] flex items-center justify-center overflow-hidden bg-black">
         <img
           src={img1}
@@ -46,7 +75,7 @@ const Home = memo(() => {
           className="absolute inset-0 w-full h-full object-cover"
           loading="lazy"
           decoding="async"
-          fetchpriority="low"
+          fetchPriority="low"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-black/70" />
         <motion.h1
@@ -60,7 +89,7 @@ const Home = memo(() => {
         </motion.h1>
       </section>
 
-      {/*  SearchBar Section */}
+      {/* SearchBar Section */}
       <section className="w-full bg-white py-10 -mt-12 sm:-mt-16 relative z-30 px-3 sm:px-4">
         <motion.div
           className="flex justify-center"
@@ -70,12 +99,18 @@ const Home = memo(() => {
           transition={{ duration: 0.8 }}
         >
           <div className="bg-white/95 sm:bg-white/80 shadow-xl rounded-3xl p-4 sm:p-6 w-full max-w-[850px] backdrop-blur-md hover:shadow-2xl transition-all duration-500">
-            <SearchBar />
+            {/* ส่ง State และ Handlers ลงไปให้ SearchBar */}
+            <SearchBar 
+                filters={filters}
+                setFilters={setFilters}
+                handleSearch={handleSearch}
+                handleClearAll={handleClearAll}
+            />
           </div>
         </motion.div>
       </section>
 
-      {/*  Property Grid Section */}
+      {/* Property Grid Section */}
       <section className="w-full px-3 xs:px-4 sm:px-8 md:px-12 py-16 bg-[#fafafa]">
         <motion.div
           initial="hidden"
@@ -93,13 +128,11 @@ const Home = memo(() => {
         </motion.div>
 
         <div className="w-full flex justify-center">
-          <PropertyGridWithPagination />
+          {/* ส่ง currentFilters ไปให้ PropertyGridWithPagination */}
+          <PropertyGridWithPagination currentFilters={currentFilters} />
         </div>
       </section>
 
-      
-
-     
       <Footer />
     </div>
   );

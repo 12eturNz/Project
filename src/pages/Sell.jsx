@@ -3,34 +3,38 @@ import { motion } from "framer-motion";
 import { useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
+// Components
 import Navbar from "../components/Navbartop";
 import WhyHomerun from "../components/WhyHomerun";
 import Footer from "../components/Footer";
 import PropertyTypeSection from "../components/PropertyTypeSection";
 import StepsWithHomerun from "../components/StepsWithHomerun";
 import FAQSection from "../components/FAQSection";
-import RegisterForm from "../components/RegisterFormSell";
-import img1 from "../assets/house1.jpg";
 import Navbarbottom from "../components/Navbarbottom";
+
+
+
+import img1 from "../assets/house1.jpg";
 
 const Sell = memo(() => {
   const [showFixedNavbar, setShowFixedNavbar] = useState(false);
+  
+  // 1. สร้าง Ref ไปหาฟอร์ม
   const registerRef = useRef(null);
+  
   const location = useLocation();
-   const { t } = useTranslation();
+  const { t } = useTranslation();
 
-  // เลื่อนไปยัง RegisterForm
+  // 2. ฟังก์ชันสั่งเลื่อนหน้าจอ (Scroll)
   const scrollToRegister = () => {
-    const yOffset = -80;
+    const yOffset = -100; // ปรับความสูงเผื่อ Header บัง
     const element = registerRef.current;
     if (element) {
-      const y =
-        element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
       window.scrollTo({ top: y, behavior: "smooth" });
     }
   };
 
-  // แสดง Navbar Bottom เมื่อ scroll ลงมา
   useEffect(() => {
     const handleScroll = () => {
       setShowFixedNavbar(window.scrollY > window.innerHeight * 0.6);
@@ -39,7 +43,6 @@ const Sell = memo(() => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  //  เมื่อเปิดหน้า /sell พร้อม hash  ให้เลื่อนไปยัง section นั้น Auto
   useEffect(() => {
     if (location.hash) {
       const sectionId = location.hash.replace("#", "");
@@ -47,7 +50,7 @@ const Sell = memo(() => {
       if (target) {
         setTimeout(() => {
           target.scrollIntoView({ behavior: "smooth" });
-        }, 300); // หน่วงเล็กน้อยให้ DOM โหลดครบ
+        }, 300);
       }
     }
   }, [location]);
@@ -63,17 +66,17 @@ const Sell = memo(() => {
 
   return (
     <div className="flex flex-col min-h-screen bg-white text-gray-800 overflow-x-hidden">
-      {/* Navbar */}
+      {/* Navbar Top: ส่ง props onSellClick ไปให้ Navbar เรียกใช้ */}
       <motion.div
         initial={{ y: 0 }}
         animate={{ y: showFixedNavbar ? -100 : 0 }}
         transition={{ duration: 0.4, ease: "easeInOut" }}
         className="fixed top-0 left-0 w-full z-50"
       >
-        <Navbar />
+        <Navbar onSellClick={scrollToRegister} />
       </motion.div>
 
-      {/* Navbar Bottom */}
+      {/* Navbar Bottom: ส่ง props ไปด้วยเช่นกัน (ถ้ามีปุ่มในนี้) */}
       <motion.div
         initial={{ y: -100, opacity: 0 }}
         animate={{
@@ -83,11 +86,11 @@ const Sell = memo(() => {
         transition={{ duration: 0.5, ease: "easeOut" }}
         className="fixed top-0 left-0 w-full z-30 shadow-md"
       >
-        <Navbarbottom />
+        <Navbarbottom onSellClick={scrollToRegister} />
       </motion.div>
 
       {/* Hero Section */}
-      <section className="relative w-full h-[60vh] sm:h-[70vh] md:h-[80vh] flex items-center justify-center overflow-hidden bg-black">
+      <section className="relative w-full h-[60vh] sm:h-[70vh] md:h-[80vh] flex flex-col items-center justify-center overflow-hidden bg-black">
         <img
           src={img1}
           alt=""
@@ -95,18 +98,21 @@ const Sell = memo(() => {
           loading="lazy"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-black/70" />
-        <motion.h1
-          variants={slideUp}
-          initial="hidden"
-          animate="visible"
-          className="relative z-10 text-white text-3xl sm:text-4xl md:text-5xl font-bold text-center px-4 leading-tight drop-shadow-lg"
+        <motion.div
+           variants={slideUp}
+           initial="hidden"
+           animate="visible"
+           className="relative z-10 flex flex-col items-center text-center px-4"
         >
-          {t("Sell.H")}<br />
-          <span className="text-[#bfa074]"> {t("Sell.H1")}</span>
-        </motion.h1>
+            <h1 className="text-white text-3xl sm:text-4xl md:text-5xl font-bold leading-tight drop-shadow-lg mb-8">
+            {t("Sell.H")}<br />
+            <span className="text-[#bfa074]"> {t("Sell.H1")}</span>
+            </h1>
+
+           
+        </motion.div>
       </section>
 
-      {/* Sections */}
       <section id="property-type">
         <PropertyTypeSection />
       </section>
@@ -119,20 +125,10 @@ const Sell = memo(() => {
         <WhyHomerun onSellClick={scrollToRegister} />
       </section>
 
+     
+
       <section id="faq">
         <FAQSection />
-      </section>
-
-      {/* Register Form */}
-      <section id="register-form" ref={registerRef} className="mt-20 mb-16 px-3 sm:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-        >
-          <RegisterForm />
-        </motion.div>
       </section>
 
       <Footer />
