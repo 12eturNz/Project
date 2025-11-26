@@ -248,7 +248,7 @@ const Home = () => {
 
           <div className="flex justify-center mt-10">
             <Link
-              to="/collection"
+              to="/Project/Buy"
               className="border border-[#bfa074] text-[#bfa074] rounded-full px-10 py-2 text-sm md:text-base font-medium hover:bg-[#bfa074] hover:text-white transition"
             >
              {t("homeSection.viewAll")}

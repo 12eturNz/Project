@@ -1,5 +1,6 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
+import Navbarbottom from "../components/Navbarbottom";
 
 
 i18n.use(initReactI18next).init({
@@ -337,7 +338,15 @@ i18n.use(initReactI18next).init({
 
 
 
-                                                    }   
+                                                    },
+                                                    Navbarbottom:{
+                                                      T1:"ผู้ขาย",
+                                                      T2:"ขั้นตอนการขายบ้าน",
+                                                      T3:"ทำไมต้อง Premium",
+                                                      T4:"คำถามที่พบบ่อย",
+                                                      T5:"เสนอขายบ้าน",
+                                                    }
+
                                           
                                           
 
@@ -686,7 +695,15 @@ i18n.use(initReactI18next).init({
                                                              H9:"Become a partner",
                                               
                                           
+                                                    },
+                                                      Navbarbottom:{
+                                                      T1:"Seller",
+                                                      T2:"Home selling process",
+                                                      T3:"Why Premium",
+                                                      T4:"Frequently asked questions",
+                                                      T5:"House for sale",
                                                     }
+
                                           
 
 

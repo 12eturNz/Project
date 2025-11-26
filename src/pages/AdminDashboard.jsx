@@ -180,18 +180,7 @@ export default function AdminDashboard({ onBack }) {
                 isActive={activeTab === "users"} 
                 onClick={() => setActiveTab("users")} 
               />
-              <TabButton 
-                label="คำขอเป็น Agent" 
-                count={agentRequests.filter(r => r.status === "Pending").length} 
-                isActive={activeTab === "agent"} 
-                onClick={() => setActiveTab("agent")} 
-              />
-              <TabButton 
-                label="คำขอเป็น Partner" 
-                count={partnerRequests.filter(r => r.status === "Pending").length} 
-                isActive={activeTab === "partner"} 
-                onClick={() => setActiveTab("partner")} 
-              />
+             
             </div>
 
             {/* Table Content */}

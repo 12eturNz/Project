@@ -12,8 +12,7 @@ import StepsWithHomerun from "../components/StepsWithHomerun";
 import FAQSection from "../components/FAQSection";
 import Navbarbottom from "../components/Navbarbottom";
 
-// Import RegisterForm
-import RegisterForm from "../components/RegisterForm"; 
+
 
 import img1 from "../assets/house1.jpg";
 
@@ -110,13 +109,7 @@ const Sell = memo(() => {
             <span className="text-[#bfa074]"> {t("Sell.H1")}</span>
             </h1>
 
-            {/* ปุ่มตรงกลางจอ (ยังคงใช้ได้เหมือนเดิม) */}
-            <button
-            onClick={scrollToRegister}
-            className="px-8 py-3 bg-[#bfa074] hover:bg-[#a38661] text-white text-lg font-semibold rounded-full shadow-lg transition-transform transform hover:scale-105"
-            >
-            {t("WhyHomerun.Search") || "เสนอขายบ้าน"}
-            </button>
+           
         </motion.div>
       </section>
 
@@ -132,10 +125,7 @@ const Sell = memo(() => {
         <WhyHomerun onSellClick={scrollToRegister} />
       </section>
 
-      {/* ส่วนฟอร์ม: ผูก Ref ไว้ตรงนี้ */}
-      <section id="register-section" ref={registerRef} className="py-20 bg-gray-50">
-         <RegisterForm />
-      </section>
+     
 
       <section id="faq">
         <FAQSection />

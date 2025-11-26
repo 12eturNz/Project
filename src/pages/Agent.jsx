@@ -20,11 +20,10 @@ import {
   ChevronDown,
 } from "lucide-react";
 
-
-
+// จุดแก้ที่ 1: เพิ่ม cursor-pointer ให้ BenefitCard
 const BenefitCard = ({ icon: Icon, title, desc }) => (
   <div className="bg-white p-6 rounded-lg shadow-lg border border-gray-100 
-                   transform hover:scale-105 transition-transform duration-300">
+                   transform hover:scale-105 transition-transform duration-300 cursor-pointer">
     <Icon
       className="text-[#bfa074] mb-3"
       size={40}
@@ -237,11 +236,12 @@ const Agent = memo(() => {
             {agentFAQ.map((item, index) => (
               <div
                 key={index}
-                className="border rounded-lg overflow-hidden bg-white shadow-sm" // (แก้)
+                className="border rounded-lg overflow-hidden bg-white shadow-sm"
               >
                 <button
                   onClick={() => setOpenFAQ(openFAQ === index ? null : index)}
-                  className="w-full flex justify-between items-center p-5 hover:bg-gray-50 text-left"
+                  // จุดแก้ที่ 2: เพิ่ม cursor-pointer ให้ปุ่ม FAQ
+                  className="w-full flex justify-between items-center p-5 hover:bg-gray-50 text-left cursor-pointer"
                 >
                   <span className="font-medium text-gray-800">{item.q}</span>
                   <motion.div
@@ -267,8 +267,6 @@ const Agent = memo(() => {
           </div>
         </div>
       </section>
-
-     
 
       <Footer />
     </div>

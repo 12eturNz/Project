@@ -621,7 +621,7 @@ const Profile = () => {
                                         </h3>
                                         <p className="text-sm mt-2 text-gray-600">
                                             <CheckCircle size={16} className="inline mr-1.5 text-green-500" />
-                                            **ยืนยันตัวตนสำเร็จแล้ว**
+                                            ยืนยันตัวตนสำเร็จแล้ว
                                             <span className="block text-xs text-gray-500 mt-0.5">อนุญาตให้ลงประกาศอสังหาฯ ได้อย่างปลอดภัย</span>
                                         </p>
                                     </div>

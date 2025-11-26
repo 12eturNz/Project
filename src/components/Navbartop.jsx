@@ -85,14 +85,7 @@ const Navbar = ({ onSellClick }) => {
         {/* Right Section (Lang / Button / Auth) */}
         <div className="hidden md:flex items-center space-x-4">
             
-          {/* ปุ่ม CTA: เสนอขายบ้าน (เพิ่มใหม่ตามคำขอ) */}
-          <button
-            onClick={handleSellClick}
-            className="hidden lg:block bg-[#007bff] hover:bg-[#0056b3] text-white px-5 py-2 rounded-full text-sm font-semibold transition shadow-md whitespace-nowrap"
-          >
-            {/* ใช้ Text "เสนอขายบ้าน" หรือดึงจาก i18n ถ้ามี */}
-            {t("WhyHomerun.Search") || "เสนอขายบ้าน"}
-          </button>
+          
 
           {/* Language Switcher */}
           <div className="relative">
@@ -212,13 +205,7 @@ const Navbar = ({ onSellClick }) => {
 
                 <hr className="border-gray-100" />
                 
-                {/* Mobile: ปุ่มเสนอขายบ้าน */}
-                <button 
-                    onClick={handleSellClick}
-                    className="w-full text-left font-medium text-[#007bff] py-2"
-                >
-                    {t("WhyHomerun.Search") || "เสนอขายบ้าน"}
-                </button>
+              
               </div>
 
               <div className="mt-auto space-y-4">
