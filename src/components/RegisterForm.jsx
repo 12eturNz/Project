@@ -221,7 +221,7 @@ const RegisterForm = () => {
       ownerPhone: form.ownerPhone,
       ownerEmail: form.ownerEmail,
       // link to where PropertyDetailNew will live — adjust route as you need
-      link: "/PropertyDetail/PropertyDetailNew"
+      link: "/PropertyDetailNew"
     };
 
     try {
