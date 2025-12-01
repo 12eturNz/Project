@@ -1,0 +1,1 @@
+var e=`/Project/assets/house1-Bjc8muwt.jpg`;export{e as t};
